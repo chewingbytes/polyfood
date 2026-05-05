@@ -1,0 +1,24 @@
+---
+import { getHomePage } from "../data/sanity";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageBuilder from "../components/PageBuilder.astro";
+
+import { setCache } from "../utils/cache";
+
+const defaultTitle = "Astro + Shopify";
+
+const homePage = (await getHomePage()).data;
+
+if (!homePage) {
+  Astro.redirect("/404");
+}
+
+const title = homePage?.pageSeo?.title || defaultTitle;
+const pageBuilder = homePage?.pageBuilder;
+
+setCache.short(Astro);
+---
+
+<BaseLayout title={title}
+  >{pageBuilder && <PageBuilder {pageBuilder} />}</BaseLayout
+>

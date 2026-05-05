@@ -1,0 +1,21 @@
+---
+import Logo from "./Logo.astro";
+import CartIcon from "./CartIcon.svelte";
+---
+
+<header class="sticky top-0 z-40">
+  <div class="border-b bg-white/70 py-3 backdrop-blur-2xl">
+    <nav class="container grid grid-cols-3 items-center">
+      <span class="sr-only">Logo</span>
+      <Logo />
+      <h1
+        class="flex justify-center text-sm font-semibold text-gray-900 sm:text-xl"
+      >
+        <a href="/">Astro Shopify Sanity</a>
+      </h1>
+      <div class="justify-self-end">
+        <CartIcon client:load />
+      </div>
+    </nav>
+  </div>
+</header>
