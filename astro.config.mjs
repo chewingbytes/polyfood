@@ -10,7 +10,6 @@ const PUBLIC_SANITY_STUDIO_DATASET =
 
 import svelte from "@astrojs/svelte";
 import react from "@astrojs/react";
-import netlify from "@astrojs/netlify";
 import sanity from "@sanity/astro";
 import tailwindcss from "@tailwindcss/vite";
 
@@ -60,24 +59,34 @@ export default defineConfig({
       PUBLIC_SANITY_VISUAL_EDITING_ENABLED: envField.string({
         context: "client",
         access: "public",
+        optional: true,
       }),
-      PUBLIC_SHOPIFY_STORE_ID: envField.string({
-        context: "client",
-        access: "public",
+      SANITY_API_READ_TOKEN: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
       }),
-      PUBLIC_SHOPIFY_SHOP: envField.string({
-        context: "client",
-        access: "public",
-      }),
-      PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN: envField.string({
-        context: "client",
-        access: "public",
-      }),
-      PRIVATE_SHOPIFY_STOREFRONT_ACCESS_TOKEN: envField.string({
+      STRIPE_SECRET_KEY: envField.string({
         context: "server",
         access: "secret",
       }),
-      SANITY_API_READ_TOKEN: envField.string({
+      STRIPE_WEBHOOK_SECRET: envField.string({
+        context: "server",
+        access: "secret",
+      }),
+      PUBLIC_SUPABASE_URL: envField.string({
+        context: "client",
+        access: "public",
+      }),
+      PUBLIC_SUPABASE_ANON_KEY: envField.string({
+        context: "client",
+        access: "public",
+      }),
+      SUPABASE_URL: envField.string({
+        context: "server",
+        access: "secret",
+      }),
+      SUPABASE_SERVICE_ROLE_KEY: envField.string({
         context: "server",
         access: "secret",
       }),
