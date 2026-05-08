@@ -1,0 +1,67 @@
+---
+import { supabase } from "../../utils/supabase";
+import { getStoreByVendorEmail } from "../../data/sanity";
+import VendorLayout from "../../layouts/VendorLayout.astro";
+import OrderBoard from "../../components/vendor/OrderBoard.svelte";
+
+// Guard: must have a valid session cookie
+const token = Astro.cookies.get("sb-vendor-token")?.value;
+if (!token) return Astro.redirect("/vendor/login");
+
+// Validate the token with Supabase admin client
+const {
+  data: { user },
+  error: authError,
+} = await supabase.auth.getUser(token);
+
+if (authError || !user) {
+  Astro.cookies.delete("sb-vendor-token", { path: "/" });
+  return Astro.redirect("/vendor/login");
+}
+
+// Resolve this vendor's store from Sanity (source of truth — no DB stores table)
+const { data: store } = await getStoreByVendorEmail(user.email ?? "");
+
+if (!store) {
+  Astro.cookies.delete("sb-vendor-token", { path: "/" });
+  return Astro.redirect("/vendor/login");
+}
+
+// Pre-fetch today's non-collected orders (SSR initial data)
+const todayStart = new Date();
+todayStart.setHours(0, 0, 0, 0);
+
+const { data: initialOrders } = await supabase
+  .from("active_orders")
+  .select("*")
+  .eq("store_sanity_id", store._id)
+  .neq("status", "collected")
+  .gte("created_at", todayStart.toISOString())
+  .order("created_at", { ascending: true });
+
+const today = new Date().toLocaleDateString("en-SG", {
+  weekday: "long",
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
+---
+
+<VendorLayout title={`${store.name} — Dashboard`} storeName={store.name}>
+  <div style="padding: 1.5rem;">
+    <div style="margin-bottom: 1.5rem;">
+      <p style="font-size: 1rem; font-weight: 700; color: #888; margin-bottom: 0.25rem;">
+        📅 Today — {today}
+      </p>
+      <h1 style="font-size: 2rem; font-weight: 900; color: #fff; line-height: 1.1;">
+        {store.name} — Orders
+      </h1>
+    </div>
+
+    <OrderBoard
+      client:load
+      storeSanityId={store._id}
+      initialOrders={initialOrders ?? []}
+    />
+  </div>
+</VendorLayout>

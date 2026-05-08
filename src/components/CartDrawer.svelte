@@ -1,287 +1,286 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import { fade, fly } from "svelte/transition";
   import {
     cart,
     isCartDrawerOpen,
-    removeCartItems,
-    isCartUpdating,
-    updateCartItem,
+    removeCartItem,
+    updateCartItemQty,
+    clearCart,
+    cartTotal,
+    cartTotalQuantity,
   } from "../stores/cart";
-  import ShopifyImage from "./ShopifyImage.svelte";
-  import Money from "./Money.svelte";
+  import {
+    collectionDetails,
+    saveCollectionDetails,
+    collectionTimeLabels,
+  } from "../stores/collectionDetails";
+  import type { CollectionTime } from "../stores/collectionDetails";
   import { clickOutside } from "../utils/click-outside";
 
-  let cartDrawerEl: HTMLDivElement | undefined = $state();
+  let drawerEl: HTMLDivElement | undefined = $state();
+  let checking = $state(false);
+  let checkoutError = $state("");
 
-  // Add classes to cart line items if cart is updating
-  let cartIsUpdatingClass = $derived($isCartUpdating
-    ? "opacity-50 pointer-events-none"
-    : "");
+  // Collection details form state (pre-fill from store)
+  let studentName = $state($collectionDetails.studentName);
+  let collectionTime: CollectionTime = $state($collectionDetails.collectionTime);
 
-  // Add focus to cart drawer when it opens
-  run(() => {
-    if ($isCartDrawerOpen) {
-      document.querySelector("body")?.classList.add("overflow-hidden");
-      cartDrawerEl?.focus();
-    }
-  });
-
-  function removeItem(id: string) {
-    removeCartItems([id]);
+  function formatSGD(cents: number): string {
+    return `$${(cents / 100).toFixed(2)}`;
   }
 
-  function updateQuantity(lineId: string, newQuantity: number) {
-    if (newQuantity > 0) {
-      updateCartItem(lineId, newQuantity);
-    } else {
-      removeItem(lineId);
-    }
-  }
-
-  function closeCartDrawer() {
-    document.querySelector("body")?.classList.remove("overflow-hidden");
+  function closeDrawer() {
+    document.body.classList.remove("overflow-hidden");
     isCartDrawerOpen.set(false);
   }
 
   function onKeyDown(event: KeyboardEvent) {
-    if (event.key === "Escape") {
-      closeCartDrawer();
+    if (event.key === "Escape") closeDrawer();
+  }
+
+  $effect(() => {
+    if ($isCartDrawerOpen) {
+      document.body.classList.add("overflow-hidden");
+      drawerEl?.focus();
+    }
+  });
+
+  async function handleCheckout() {
+    checkoutError = "";
+
+    if (!studentName.trim()) {
+      checkoutError = "Please enter your name.";
+      return;
+    }
+
+    if ($cart.length === 0) {
+      checkoutError = "Your cart is empty.";
+      return;
+    }
+
+    saveCollectionDetails({ studentName: studentName.trim(), collectionTime });
+
+    checking = true;
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          items: $cart,
+          studentName: studentName.trim(),
+          collectionTime,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        checkoutError = data.error ?? "Checkout failed. Please try again.";
+        return;
+      }
+      // Redirect to Stripe PayNow checkout
+      window.location.href = data.url;
+    } catch {
+      checkoutError = "Network error. Please try again.";
+    } finally {
+      checking = false;
     }
   }
 </script>
 
 {#if $isCartDrawerOpen}
+  <!-- Backdrop -->
   <div
-    class="relative z-50"
-    aria-labelledby="slide-over-title"
+    in:fade={{ duration: 300 }}
+    out:fade={{ duration: 300 }}
+    class="fixed inset-0 z-40 bg-slate-400/50 backdrop-blur-sm"
+    aria-hidden="true"
+  ></div>
+
+  <!-- Drawer -->
+  <div
+    class="fixed inset-0 z-50 overflow-hidden"
     role="dialog"
     aria-modal="true"
+    aria-labelledby="cart-title"
   >
-    <div
-      in:fade={{ duration: 500 }}
-      out:fade={{ duration: 500 }}
-      class="fixed inset-0 bg-slate-400/50 backdrop-blur-sm transition-opacity"
-></div>
-
-    <div class="fixed inset-0 overflow-hidden">
-      <div class="absolute inset-0 overflow-hidden">
+    <div class="absolute inset-0 overflow-hidden">
+      <div
+        role="document"
+        class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-6 focus:outline-none"
+        tabindex="-1"
+        use:clickOutside={() => closeDrawer()}
+        bind:this={drawerEl}
+        onkeydown={onKeyDown}
+      >
         <div
-          role="dialog"
-          class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-6 focus:outline-none"
-          tabindex="-1"
-          use:clickOutside={() => closeCartDrawer()}
-          bind:this={cartDrawerEl}
-          onkeydown={onKeyDown}
+          in:fly={{ duration: 400, x: 500, opacity: 1 }}
+          out:fly={{ duration: 300, x: 500, opacity: 1 }}
+          class="pointer-events-auto w-screen max-w-lg bg-white flex flex-col max-h-screen"
         >
-          <div
-            in:fly={{ duration: 500, x: 500, opacity: 100 }}
-            out:fly={{ duration: 500, x: 500, opacity: 100 }}
-            class="pointer-events-auto w-screen max-w-lg max-h-screen bg-white"
-          >
-            <div class="flex flex-col min-h-full max-h-screen">
-              <div class="flex items-start justify-between shadow-sm p-5">
-                <h2
-                  class="text-2xl flex gap-4 items-center font-bold text-zinc-800"
-                  id="slide-over-title"
-                >
-                  Your cart
-                  {#if $isCartUpdating}
-                    <svg
-                      class="animate-spin -ml-1 mr-3 h-4 w-4"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        class="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        stroke-width="4"
-                      />
-                      <path
-                        class="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      />
-                    </svg>
-                  {/if}
-                </h2>
-                <div class="ml-3 flex h-7 items-center">
-                  <button
-                    onclick={() => closeCartDrawer()}
-                    type="button"
-                    class="-m-2 p-2 text-gray-400 hover:text-gray-500"
-                  >
-                    <span class="sr-only">Close panel</span>
-                    <!-- Heroicon name: outline/x-mark -->
-                    <svg
-                      class="h-6 w-6"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-
-              <div class="flex-1 overflow-y-scroll">
-                <div class="px-5">
-                  {#if $cart && $cart.lines?.nodes.length > 0}
-                    <!-- svelte-ignore a11y_no_redundant_roles -->
-                    <ul
-                      role="list"
-                      class="divide-y divide-zinc-100 {cartIsUpdatingClass}"
-                    >
-                      {#each $cart.lines?.nodes as item}
-                        <li class="grid py-8 grid-cols-12 gap-3">
-                          <div
-                            class="overflow-hidden rounded-lg col-span-3 lg:col-span-2"
-                          >
-                            <ShopifyImage
-                              image={item.merchandise.image}
-                              classList="object-cover h-full object-center aspect-1"
-                              sizes="(min-width: 100px) 100px"
-                              loading="lazy"
-                            />
-                          </div>
-                          <div
-                            class="col-span-7 lg:col-span-8 flex flex-col gap-2"
-                          >
-                            <a
-                              class="hover:underline w-fit"
-                              href={`/products/${item.merchandise.product.handle}`}
-                            >
-                              {item.merchandise.product.title}
-                            </a>
-                            {#if item.merchandise.title !== "Default Title"}
-                              <p class="text-xs text-zinc-600">
-                                {item.merchandise.title}
-                              </p>
-                            {/if}
-                            <p class="text-xs">
-                              <Money price={item.cost.amountPerQuantity} showCurrency={false} />
-                            </p>
-
-                            <!-- Quantity Controls -->
-                            <div class="flex items-center gap-2 mt-2">
-                              <button
-                                onclick={() => updateQuantity(item.id, item.quantity - 1)}
-                                disabled={$isCartUpdating || item.quantity <= 1}
-                                class="w-8 h-8 rounded border border-zinc-300 flex items-center justify-center text-zinc-600 hover:bg-zinc-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                                aria-label="Decrease quantity"
-                              >
-                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
-                                </svg>
-                              </button>
-
-                              <span class="min-w-[2rem] text-center text-sm font-medium">
-                                {item.quantity}
-                              </span>
-
-                              <button
-                                onclick={() => updateQuantity(item.id, item.quantity + 1)}
-                                disabled={$isCartUpdating}
-                                class="w-8 h-8 rounded border border-zinc-300 flex items-center justify-center text-zinc-600 hover:bg-zinc-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                                aria-label="Increase quantity"
-                              >
-                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                                </svg>
-                              </button>
-                            </div>
-                          </div>
-                          <div
-                            class="col-span-2 items-end flex justify-between flex-col"
-                          >
-                            <button
-                              aria-label="Remove item"
-                              onclick={() => {
-                                removeItem(item.id);
-                              }}
-                              type="button"
-                              disabled={$isCartUpdating}
-                              class="text-zinc-400 hover:text-zinc-600 disabled:opacity-50"
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke-width="1.5"
-                                stroke="currentColor"
-                                class="w-5 h-5"
-                              >
-                                <path
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
-                                />
-                              </svg>
-                            </button>
-                            <div>
-                              <p class="font-medium">
-                                <Money price={item.cost.totalAmount} showCurrency={false} />
-                              </p>
-                            </div>
-                          </div>
-                        </li>
-                      {/each}
-                    </ul>
-                  {:else}
-                    <div class="text-center mt-20">
-                      <p class="text-gray-500">Your cart is empty</p>
-                      <a
-                        href="/products"
-                        class="font-semibold text-emerald-900 hover:text-emerald-700"
-                      >
-                        Continue Shopping
-                        <span aria-hidden="true"> &rarr;</span>
-                      </a>
-                    </div>
-                  {/if}
-                </div>
-              </div>
-
-              <div class="">
-                {#if $cart && $cart.lines?.nodes.length > 0}
-                  <div class="border-t border-zinc-200 py-6 px-4 sm:px-6">
-                    <div
-                      class="flex justify-between text-base font-medium text-gray-900"
-                    >
-                      <p>Subtotal</p>
-                      <p>
-                        <Money
-                          price={$cart.cost.subtotalAmount}
-                          showCurrency={true}
-                        />
-                      </p>
-                    </div>
-                    <p class="mt-0.5 text-sm text-gray-500">
-                      Shipping and taxes calculated at checkout.
-                    </p>
-                    <div class="mt-6">
-                      <a href={$cart.checkoutUrl} class="button">Checkout</a>
-                    </div>
-                  </div>
-                {/if}
-              </div>
-            </div>
+          <!-- Header -->
+          <div class="flex items-center justify-between border-b px-5 py-4 shadow-sm flex-shrink-0">
+            <h2 id="cart-title" class="text-2xl font-bold text-zinc-800">
+              Your Cart
+              {#if cartTotalQuantity($cart) > 0}
+                <span class="ml-2 text-sm font-medium text-zinc-500">
+                  ({cartTotalQuantity($cart)} item{cartTotalQuantity($cart) !== 1 ? "s" : ""})
+                </span>
+              {/if}
+            </h2>
+            <button
+              onclick={() => closeDrawer()}
+              class="-m-2 p-2 text-zinc-400 hover:text-zinc-600"
+              aria-label="Close cart"
+            >
+              <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </div>
+
+          <!-- Body -->
+          <div class="flex-1 overflow-y-auto px-5 py-4">
+            {#if $cart.length === 0}
+              <div class="flex flex-col items-center justify-center h-full py-16 text-center">
+                <svg class="w-16 h-16 text-zinc-200 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                </svg>
+                <p class="text-zinc-400 font-medium">Your cart is empty</p>
+              </div>
+            {:else}
+              <!-- Store name -->
+              <p class="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-3">
+                {$cart[0].storeName}
+              </p>
+
+              <!-- Items list -->
+              <ul class="divide-y divide-zinc-100 mb-6">
+                {#each $cart as item (item.id)}
+                  <li class="py-4 flex items-center gap-3">
+                    <div class="flex-1 min-w-0">
+                      <p class="font-semibold text-zinc-800 truncate">{item.name}</p>
+                      <p class="text-sm text-zinc-500">{formatSGD(item.priceInCents)} each</p>
+                    </div>
+
+                    <!-- Qty controls -->
+                    <div class="flex items-center gap-2">
+                      <button
+                        onclick={() => updateCartItemQty(item.id, item.qty - 1)}
+                        class="w-7 h-7 rounded border border-zinc-300 flex items-center justify-center text-zinc-600 hover:bg-zinc-50"
+                        aria-label="Decrease quantity"
+                      >
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
+                        </svg>
+                      </button>
+                      <span class="w-6 text-center text-sm font-semibold">{item.qty}</span>
+                      <button
+                        onclick={() => updateCartItemQty(item.id, item.qty + 1)}
+                        class="w-7 h-7 rounded border border-zinc-300 flex items-center justify-center text-zinc-600 hover:bg-zinc-50"
+                        aria-label="Increase quantity"
+                      >
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        </svg>
+                      </button>
+                    </div>
+
+                    <!-- Line total -->
+                    <span class="text-sm font-bold text-zinc-800 w-14 text-right">
+                      {formatSGD(item.priceInCents * item.qty)}
+                    </span>
+
+                    <!-- Remove -->
+                    <button
+                      onclick={() => removeCartItem(item.id)}
+                      class="text-zinc-300 hover:text-red-500 ml-1"
+                      aria-label="Remove {item.name}"
+                    >
+                      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </li>
+                {/each}
+              </ul>
+
+              <!-- Clear cart -->
+              <button
+                onclick={() => clearCart()}
+                class="text-xs text-zinc-400 hover:text-red-500 underline mb-6"
+              >
+                Clear cart
+              </button>
+
+              <!-- Collection details -->
+              <div class="border-t pt-5">
+                <h3 class="font-bold text-zinc-800 mb-4">Your details</h3>
+
+                <label class="block mb-4">
+                  <span class="text-sm font-semibold text-zinc-700">Your name</span>
+                  <input
+                    type="text"
+                    bind:value={studentName}
+                    placeholder="e.g. Bryan"
+                    class="mt-1 block w-full rounded border border-zinc-300 px-3 py-2 text-sm focus:border-zinc-500 focus:outline-none"
+                    autocomplete="given-name"
+                  />
+                </label>
+
+                <label class="block mb-2">
+                  <span class="text-sm font-semibold text-zinc-700">Collection time</span>
+                  <select
+                    bind:value={collectionTime}
+                    class="mt-1 block w-full rounded border border-zinc-300 px-3 py-2 text-sm focus:border-zinc-500 focus:outline-none bg-white"
+                  >
+                    {#each Object.entries(collectionTimeLabels) as [key, label]}
+                      <option value={key}>{label}</option>
+                    {/each}
+                  </select>
+                </label>
+              </div>
+            {/if}
+          </div>
+
+          <!-- Footer -->
+          {#if $cart.length > 0}
+            <div class="border-t px-5 py-4 flex-shrink-0">
+              <div class="flex justify-between text-base font-bold text-zinc-800 mb-4">
+                <span>Total</span>
+                <span>{formatSGD(cartTotal($cart))}</span>
+              </div>
+
+              {#if checkoutError}
+                <p class="text-sm text-red-600 mb-3">{checkoutError}</p>
+              {/if}
+
+              <button
+                onclick={handleCheckout}
+                disabled={checking}
+                class="w-full rounded bg-[#635BFF] text-white font-bold py-3 px-4 flex items-center justify-center gap-2 hover:bg-[#4f47cc] disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
+              >
+                {#if checking}
+                  <svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                  </svg>
+                  Redirecting…
+                {:else}
+                  Pay with PayNow
+                  <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                {/if}
+              </button>
+
+              <p class="text-center text-xs text-zinc-400 mt-2">
+                Secure payment via Stripe · SGD only
+              </p>
+            </div>
+          {/if}
         </div>
       </div>
     </div>
   </div>
 {/if}
+

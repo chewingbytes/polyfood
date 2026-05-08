@@ -1,25 +1,12 @@
-import { AsteriskIcon, CubeIcon, DocumentTextIcon } from "@sanity/icons";
-
+import { TrolleyIcon, HomeIcon, LemonIcon } from "@sanity/icons";
 import type { StructureResolver } from "sanity/structure";
-import { singletonListItem, SINGLETONS } from "./singletons";
 
-/**
- * Structure builder is useful whenever you want to control how documents are grouped and
- * listed in the studio or for adding additional in-studio previews or content to documents.
- * Learn more: https://www.sanity.io/docs/structure-builder-introduction
- */
-
-export const structure: StructureResolver = (S, _) =>
+export const structure: StructureResolver = (S) =>
   S.list()
-    .title("Storefront Content")
+    .title("Food at Poly")
     .items([
-      singletonListItem(S, SINGLETONS.home),
-      S.documentTypeListItem("page").title("Pages").icon(DocumentTextIcon),
-      S.divider(),
-      S.documentTypeListItem("collection").title("Collections").icon(CubeIcon),
-      S.documentTypeListItem("product").title("Products").icon(AsteriskIcon),
-      S.divider(),
-      singletonListItem(S, SINGLETONS.plp),
-      // Settings Singleton in order to view/edit the one particular document for Settings.  Learn more about Singletons: https://www.sanity.io/docs/create-a-link-to-a-single-edit-page-in-your-main-document-type-list
-      singletonListItem(S, SINGLETONS.settings),
+      S.documentTypeListItem("polytechnic").title("Polytechnics").icon(HomeIcon),
+      S.documentTypeListItem("canteen").title("Canteens").icon(TrolleyIcon),
+      S.documentTypeListItem("store").title("Stores").icon(HomeIcon),
+      S.documentTypeListItem("foodProduct").title("Food Products").icon(LemonIcon),
     ]);

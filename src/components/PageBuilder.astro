@@ -50,7 +50,7 @@ const { pageBuilder } = Astro.props;
   }
 </style>
 {
-  pageBuilder?.map((block, index) => {
+  (pageBuilder as any[])?.map((block: any, index: number) => {
     return (
       <section
         class="section"

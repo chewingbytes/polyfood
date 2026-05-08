@@ -1,0 +1,57 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import AuthForm from "../../components/auth/AuthForm.svelte";
+---
+
+<BaseLayout title="Login — Food at Poly" description="Sign in to your Food at Poly account">
+  <div
+    class="min-h-screen flex items-center justify-center px-4 py-12"
+    style="background: var(--color-neo-bg);"
+  >
+    <div class="w-full max-w-md">
+      <!-- Header -->
+      <div class="mb-8">
+        <a href="/" class="inline-block mb-4">
+          <div
+            style="border: 4px solid #000; background: #FFD93D; padding: 0.4rem 0.8rem; box-shadow: 4px 4px 0 #000; display: inline-block;"
+          >
+            <span style="font-weight: 900; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em;">← Food at Poly</span>
+          </div>
+        </a>
+        <h1
+          style="font-size: 3rem; font-weight: 900; text-transform: uppercase; line-height: 1; color: #000;"
+        >
+          Welcome Back
+        </h1>
+        <p style="margin-top: 0.5rem; font-weight: 700; color: #555;">
+          Sign in to track your orders and save your favourite stores.
+        </p>
+      </div>
+
+      <!-- Auth card -->
+      <div
+        style="border: 4px solid #000; background: #fff; padding: 2rem; box-shadow: 8px 8px 0 #FFD93D;"
+      >
+        <AuthForm
+          client:load
+          showGuest={false}
+          onSuccess={() => window.location.href = (new URLSearchParams(window.location.search).get('from') ?? '/')}
+        />
+      </div>
+
+      <p style="margin-top: 1.25rem; font-size: 0.8125rem; font-weight: 700; color: #888; text-align: center;">
+        Ordering without an account? Just <a href="/" style="color: #000; font-weight: 900; text-decoration: underline;">continue browsing</a> — you can still place orders as a guest.
+      </p>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  // If the user is already logged in, redirect away
+  import { supabaseBrowser } from "../../utils/supabase-browser";
+  const { data } = await supabaseBrowser.auth.getSession();
+  if (data.session) {
+    const from = new URLSearchParams(window.location.search).get("from") ?? "/";
+    window.location.href = from;
+  }
+</script>

@@ -1,0 +1,5 @@
+---
+// Clear the session cookie and redirect to login
+Astro.cookies.delete("sb-vendor-token", { path: "/" });
+return Astro.redirect("/vendor/login");
+---

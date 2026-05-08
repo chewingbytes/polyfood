@@ -1,22 +1,14 @@
 ---
-import Header from "../components/Header.astro";
-import Footer from "../components/Footer.astro";
+import AuthButton from "../components/AuthButton.svelte";
+import CartIcon from "../components/CartIcon.svelte";
 import CartDrawer from "../components/CartDrawer.svelte";
-import AnnouncementBar from "../components/AnnouncementBar.astro";
-import { VisualEditing } from "@sanity/astro/visual-editing";
 
 export interface Props {
   title: string;
   description?: string;
 }
 
-const visualEditingEnabled =
-  import.meta.env.PUBLIC_SANITY_VISUAL_EDITING_ENABLED == "true";
-
-const defaultDesc =
-  "A lightweight and minimalit Astro starter theme using Shopify with Svelte, Tailwind, and TypeScript.";
-
-const { title, description = defaultDesc } = Astro.props as Props;
+const { title, description = "Order food from your polytechnic canteen." } = Astro.props as Props;
 ---
 
 <html lang="en">
@@ -25,6 +17,12 @@ const { title, description = defaultDesc } = Astro.props as Props;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700;900&display=block"
+      rel="stylesheet"
+    />
     <title>{title}</title>
     <meta name="description" content={description} />
     <style is:global>
@@ -32,13 +30,26 @@ const { title, description = defaultDesc } = Astro.props as Props;
     </style>
   </head>
   <body>
-    <AnnouncementBar />
-    <CartDrawer client:idle />
-    <Header />
-    <main>
+    <header class="border-b-4 border-black bg-yellow-300">
+      <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
+        <a href="/" class="border-4 border-black bg-black px-4 py-2 text-xl font-black uppercase tracking-tight text-yellow-300 shadow-[4px_4px_0px_0px_#FFD93D] transition-all duration-100 hover:shadow-[6px_6px_0px_0px_#FFD93D]">
+          Food at Poly
+        </a>
+        <nav class="flex gap-2 items-center">
+          <a href="/polytechnics" class="border-4 border-black bg-white px-4 py-2 text-sm font-bold uppercase tracking-wide shadow-[4px_4px_0px_0px_#000] transition-all duration-100 hover:-translate-y-0.5 hover:bg-red-400 hover:shadow-[6px_6px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none">
+            Polytechnics
+          </a>
+          <AuthButton client:load />
+          <CartIcon client:load />
+        </nav>
+      </div>
+    </header>
+    <CartDrawer client:load />
+    <main class="flex-1">
       <slot />
     </main>
-    <Footer />
-    <VisualEditing enabled={visualEditingEnabled} />
+    <footer class="mt-auto border-t-4 border-black bg-black py-8 text-center">
+      <p class="font-bold uppercase tracking-widest text-yellow-300">Food at Poly &mdash; Singapore</p>
+    </footer>
   </body>
 </html>

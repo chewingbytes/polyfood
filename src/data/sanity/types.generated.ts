@@ -13,380 +13,23 @@
  */
 
 // Source: schema.json
-export type CollectionRule = {
-  _type: "collectionRule";
-  column?: string;
-  relation?: string;
-  condition?: string;
-};
-
-export type ProxyString = string;
-
-export type ProductWithVariant = {
-  _type: "productWithVariant";
-  product?: {
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: "product";
-  };
-  variant?: {
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: "productVariant";
-  };
-};
-
-export type PriceRange = {
-  _type: "priceRange";
-  minVariantPrice?: number;
-  maxVariantPrice?: number;
-};
-
-export type PlaceholderString = string;
-
-export type Option = {
-  _type: "option";
-  name?: string;
-  values?: Array<string>;
-};
-
-export type Inventory = {
-  _type: "inventory";
-  isAvailable?: boolean;
-  management?: string;
-  policy?: string;
-};
-
-export type LinkInternal = {
-  _type: "linkInternal";
-  title?: string;
-  reference:
-    | {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "home";
-      }
-    | {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "plp";
-      }
-    | {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "page";
-      }
-    | {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "product";
-      };
-};
-
-export type LinkExternal = {
-  _type: "linkExternal";
-  title?: string;
-  url: string;
-  newTab?: boolean;
-};
-
-export type EditorialSection = {
-  _type: "editorialSection";
-  cover: Array<
-    | {
-        asset?: {
-          _ref: string;
-          _type: "reference";
-          _weak?: boolean;
-          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-        };
-        media?: unknown;
-        hotspot?: SanityImageHotspot;
-        crop?: SanityImageCrop;
-        alt?: string;
-        _type: "backgroundImage";
-        _key: string;
-      }
-    | ({
-        _key: string;
-      } & Color)
-  >;
-  content?: Array<{
-    children?: Array<{
-      marks?: Array<string>;
-      text?: string;
-      _type: "span";
-      _key: string;
-    }>;
-    style?: "normal" | "h1" | "h2" | "h3" | "h4" | "blockquote";
-    listItem?: "bullet";
-    markDefs?: Array<
-      | {
-          url: string;
-          newTab?: boolean;
-          _type: "linkExternal";
-          _key: string;
-        }
-      | {
-          reference:
-            | {
-                _ref: string;
-                _type: "reference";
-                _weak?: boolean;
-                [internalGroqTypeReferenceTo]?: "home";
-              }
-            | {
-                _ref: string;
-                _type: "reference";
-                _weak?: boolean;
-                [internalGroqTypeReferenceTo]?: "page";
-              }
-            | {
-                _ref: string;
-                _type: "reference";
-                _weak?: boolean;
-                [internalGroqTypeReferenceTo]?: "plp";
-              }
-            | {
-                _ref: string;
-                _type: "reference";
-                _weak?: boolean;
-                [internalGroqTypeReferenceTo]?: "product";
-              };
-          _type: "linkInternal";
-          _key: string;
-        }
-    >;
-    level?: number;
-    _type: "block";
-    _key: string;
-  }>;
-  textColor?: Color;
-};
-
-export type RichText = Array<{
-  children?: Array<{
-    marks?: Array<string>;
-    text?: string;
-    _type: "span";
-    _key: string;
-  }>;
-  style?: "normal" | "h1" | "h2" | "h3" | "h4" | "blockquote";
-  listItem?: "bullet";
-  markDefs?: Array<
-    | {
-        url: string;
-        newTab?: boolean;
-        _type: "linkExternal";
-        _key: string;
-      }
-    | {
-        reference:
-          | {
-              _ref: string;
-              _type: "reference";
-              _weak?: boolean;
-              [internalGroqTypeReferenceTo]?: "home";
-            }
-          | {
-              _ref: string;
-              _type: "reference";
-              _weak?: boolean;
-              [internalGroqTypeReferenceTo]?: "page";
-            }
-          | {
-              _ref: string;
-              _type: "reference";
-              _weak?: boolean;
-              [internalGroqTypeReferenceTo]?: "plp";
-            }
-          | {
-              _ref: string;
-              _type: "reference";
-              _weak?: boolean;
-              [internalGroqTypeReferenceTo]?: "product";
-            };
-        _type: "linkInternal";
-        _key: string;
-      }
-  >;
-  level?: number;
-  _type: "block";
-  _key: string;
-}>;
-
-export type BackgroundImage = {
-  _type: "backgroundImage";
-  asset?: {
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-  };
-  media?: unknown;
-  hotspot?: SanityImageHotspot;
-  crop?: SanityImageCrop;
-  alt?: string;
-};
-
-export type ProductVariant = {
+export type FoodProduct = {
   _id: string;
-  _type: "productVariant";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  titleProxy?: ProxyString;
-  store?: ShopifyProductVariant;
-};
-
-export type ShopifyProductVariant = {
-  _type: "shopifyProductVariant";
-  createdAt?: string;
-  updatedAt?: string;
-  status: "active" | "archived" | "draft";
-  isDeleted?: boolean;
-  title?: string;
-  sku?: string;
-  id?: number;
-  gid?: string;
-  productId?: number;
-  productGid?: string;
-  price?: number;
-  compareAtPrice?: number;
-  inventory?: Inventory;
-  option1?: string;
-  option2?: string;
-  option3?: string;
-  previewImageUrl?: string;
-};
-
-export type Collection = {
-  _id: string;
-  _type: "collection";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  hidden?: string;
-  titleProxy?: ProxyString;
-  slugProxy?: ProxyString;
-  pageBuilder?: Array<
-    {
-      _key: string;
-    } & EditorialSection
-  >;
-  store?: ShopifyCollection;
-};
-
-export type ShopifyCollection = {
-  _type: "shopifyCollection";
-  createdAt?: string;
-  updatedAt?: string;
-  isDeleted?: boolean;
-  title?: string;
-  id?: number;
-  gid?: string;
-  slug?: Slug;
-  descriptionHtml?: string;
-  imageUrl?: string;
-  rules?: Array<
-    {
-      _key: string;
-    } & CollectionRule
-  >;
-  disjunctive?: boolean;
-  sortOrder?: string;
-};
-
-export type Home = {
-  _id: string;
-  _type: "home";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  pageBuilder?: Array<
-    {
-      _key: string;
-    } & EditorialSection
-  >;
-  pageSeo?: PageSeo;
-};
-
-export type Page = {
-  _id: string;
-  _type: "page";
+  _type: "foodProduct";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
   name: string;
   slug: Slug;
-  pageBuilder?: Array<
-    {
-      _key: string;
-    } & EditorialSection
-  >;
-  pageSeo?: PageSeo;
-};
-
-export type Product = {
-  _id: string;
-  _type: "product";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  titleProxy?: ProxyString;
-  slugProxy?: ProxyString;
-  pageBuilder?: Array<
-    {
-      _key: string;
-    } & EditorialSection
-  >;
-  store?: ShopifyProduct;
-};
-
-export type ShopifyProduct = {
-  _type: "shopifyProduct";
-  createdAt?: string;
-  updatedAt?: string;
-  status?: "active" | "archived" | "draft";
-  isDeleted?: boolean;
-  title?: string;
-  id?: number;
-  gid?: string;
-  slug?: Slug;
-  descriptionHtml?: string;
-  productType?: string;
-  vendor?: string;
-  collections?: string;
-  tags?: string;
-  priceRange?: PriceRange;
-  previewImageUrl?: string;
-  options?: Array<
-    {
-      _key: string;
-    } & Option
-  >;
-};
-
-export type Plp = {
-  _id: string;
-  _type: "plp";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  pageSeo?: PageSeo;
-};
-
-export type PageSeo = {
-  _type: "pageSeo";
-  title?: PlaceholderString;
+  store: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "store";
+  };
   description?: string;
-  ogImage?: {
+  price: number;
+  image?: {
     asset?: {
       _ref: string;
       _type: "reference";
@@ -396,78 +39,122 @@ export type PageSeo = {
     media?: unknown;
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
-    alt?: string;
     _type: "image";
   };
+  category?: "main" | "side" | "beverage" | "dessert" | "snack";
+  isVegetarian?: boolean;
+  isHalal?: boolean;
+  spicyLevel?: 0 | 1 | 2 | 3 | 4;
+  isAvailable?: boolean;
+  preparationTime?: number;
+  shopifyVariantId?: string;
+  addOnOptions?: Array<string>;
 };
 
-export type Settings = {
+export type Store = {
   _id: string;
-  _type: "settings";
+  _type: "store";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  title: string;
-  header: Header;
-  footer: Footer;
-  metadataBase: string;
+  name: string;
+  slug: Slug;
+  canteen: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "canteen";
+  };
+  description?: string;
+  cuisine?: string;
+  stallNumber?: string;
+  image?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+  contactNumber?: string;
+  isActive?: boolean;
+  vendorEmail?: string;
 };
 
-export type Footer = {
-  _type: "footer";
-  links?: Array<
-    | ({
-        _key: string;
-      } & LinkInternal)
-    | ({
-        _key: string;
-      } & LinkExternal)
-  >;
+export type Canteen = {
+  _id: string;
+  _type: "canteen";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name: string;
+  slug: Slug;
+  polytechnic: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "polytechnic";
+  };
+  description?: string;
+  location?: string;
+  openingHours?: string;
+  image?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+  isActive?: boolean;
 };
 
-export type Header = {
-  _type: "header";
-  links?: Array<
-    | ({
-        _key: string;
-      } & LinkInternal)
-    | ({
-        _key: string;
-      } & LinkExternal)
-  >;
-};
-
-export type Color = {
-  _type: "color";
-  hex?: string;
-  alpha?: number;
-  hsl?: HslaColor;
-  hsv?: HsvaColor;
-  rgb?: RgbaColor;
-};
-
-export type RgbaColor = {
-  _type: "rgbaColor";
-  r?: number;
-  g?: number;
-  b?: number;
-  a?: number;
-};
-
-export type HsvaColor = {
-  _type: "hsvaColor";
-  h?: number;
-  s?: number;
-  v?: number;
-  a?: number;
-};
-
-export type HslaColor = {
-  _type: "hslaColor";
-  h?: number;
-  s?: number;
-  l?: number;
-  a?: number;
+export type Polytechnic = {
+  _id: string;
+  _type: "polytechnic";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name: string;
+  shortName: string;
+  slug: Slug;
+  description?: string;
+  address?: string;
+  website?: string;
+  image?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+  logo?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+  color?: string;
+  isActive?: boolean;
 };
 
 export type SanityImagePaletteSwatch = {
@@ -589,35 +276,10 @@ export type SanityAssetSourceData = {
 };
 
 export type AllSanitySchemaTypes =
-  | CollectionRule
-  | ProxyString
-  | ProductWithVariant
-  | PriceRange
-  | PlaceholderString
-  | Option
-  | Inventory
-  | LinkInternal
-  | LinkExternal
-  | EditorialSection
-  | RichText
-  | BackgroundImage
-  | ProductVariant
-  | ShopifyProductVariant
-  | Collection
-  | ShopifyCollection
-  | Home
-  | Page
-  | Product
-  | ShopifyProduct
-  | Plp
-  | PageSeo
-  | Settings
-  | Footer
-  | Header
-  | Color
-  | RgbaColor
-  | HsvaColor
-  | HslaColor
+  | FoodProduct
+  | Store
+  | Canteen
+  | Polytechnic
   | SanityImagePaletteSwatch
   | SanityImagePalette
   | SanityImageDimensions
@@ -633,529 +295,326 @@ export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./src/data/sanity/groq.ts
 // Variable: SETTINGS_QUERY
 // Query: *[_type == "settings"][0]{    _type,    _id,    _updatedAt,    _createdAt,    "title": coalesce(title, "Untitled Store"),    metadataBase,    header{      _type,      announcementBar{        _type,        content,        "link": links[0]{  _type,  _key,  linkType,  "url": select(    linkType == 'href' => href,    linkType == 'home' => '/',    linkType == 'plp' => '/products',    linkType == 'page' => '/' + page->slug.current,    linkType == 'product' => '/products/' + product->store.slug.current,    linkType == 'collection' => '/collections/' + collection->store.slug.current,  ),  "label": select(      label.length > 0 => label,      linkType == 'home' => 'Home',      linkType == 'plp' => 'All Products',      linkType == 'page' => page->name,      linkType == 'product' => product->store.title,      linkType == 'collection' => collection->store.title,      "Link"    ),  openInNewTab}      },      "links": links[]{  _type,  _key,  linkType,  "url": select(    linkType == 'href' => href,    linkType == 'home' => '/',    linkType == 'plp' => '/products',    linkType == 'page' => '/' + page->slug.current,    linkType == 'product' => '/products/' + product->store.slug.current,    linkType == 'collection' => '/collections/' + collection->store.slug.current,  ),  "label": select(      label.length > 0 => label,      linkType == 'home' => 'Home',      linkType == 'plp' => 'All Products',      linkType == 'page' => page->name,      linkType == 'product' => product->store.title,      linkType == 'collection' => collection->store.title,      "Link"    ),  openInNewTab}    },    footer{      _type,      "links": links[]{  _type,  _key,  linkType,  "url": select(    linkType == 'href' => href,    linkType == 'home' => '/',    linkType == 'plp' => '/products',    linkType == 'page' => '/' + page->slug.current,    linkType == 'product' => '/products/' + product->store.slug.current,    linkType == 'collection' => '/collections/' + collection->store.slug.current,  ),  "label": select(      label.length > 0 => label,      linkType == 'home' => 'Home',      linkType == 'plp' => 'All Products',      linkType == 'page' => page->name,      linkType == 'product' => product->store.title,      linkType == 'collection' => collection->store.title,      "Link"    ),  openInNewTab}    },  }
-export type SETTINGS_QUERYResult = {
-  _type: "settings";
-  _id: string;
-  _updatedAt: string;
-  _createdAt: string;
-  title: string;
-  metadataBase: string;
-  header: {
-    _type: "header";
-    announcementBar: null;
-    links: Array<
-      | {
-          _type: "linkExternal";
-          _key: string;
-          linkType: null;
-          url: null;
-          label: "Link";
-          openInNewTab: null;
-        }
-      | {
-          _type: "linkInternal";
-          _key: string;
-          linkType: null;
-          url: null;
-          label: "Link";
-          openInNewTab: null;
-        }
-    > | null;
-  };
-  footer: {
-    _type: "footer";
-    links: Array<
-      | {
-          _type: "linkExternal";
-          _key: string;
-          linkType: null;
-          url: null;
-          label: "Link";
-          openInNewTab: null;
-        }
-      | {
-          _type: "linkInternal";
-          _key: string;
-          linkType: null;
-          url: null;
-          label: "Link";
-          openInNewTab: null;
-        }
-    > | null;
-  };
-} | null;
+export type SETTINGS_QUERYResult = null;
 // Variable: HOME_QUERY
 // Query: *[_type == 'home' ][0]{    _type,    _id,    _updatedAt,    _createdAt,    "status": select(_id in path("drafts.**") => "draft", "published"),    "name": "Home",    "slug": "/",    "pageBuilder": pageBuilder[]{        _key,  _type,  "cover": cover[] {    _type,    "backgroundImage": select(_type == "backgroundImage" => {      asset,      crop,      hotspot,      alt,    }),    "color": select(_type == "color" => hex)  },  "content": content[]{    ...,    markDefs[]{      ...,      "url": select(      _type == 'linkInternal' => select(reference->._type == 'product' => '/products/' + reference->store.slug.current,        reference->._type == 'home' => '/',        reference->._type == 'page' => '/' + reference->.slug.current,        reference->._type == 'plp' => '/products',      ),      _type == 'linkExternal' => url,      )},    },  "textColor": coalesce(textColor.hex, 'black'),    },    pageSeo{  _type,  "title": coalesce(title, ^.name),  description,  ogImage}  }
-export type HOME_QUERYResult = {
-  _type: "home";
-  _id: string;
-  _updatedAt: string;
-  _createdAt: string;
-  status: "draft" | "published";
-  name: "Home";
-  slug: "/";
-  pageBuilder: Array<{
-    _key: string;
-    _type: "editorialSection";
-    cover: Array<
-      | {
-          _type: "backgroundImage";
-          backgroundImage: {
-            asset: {
-              _ref: string;
-              _type: "reference";
-              _weak?: boolean;
-              [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-            } | null;
-            crop: SanityImageCrop | null;
-            hotspot: SanityImageHotspot | null;
-            alt: string | null;
-          };
-          color: null;
-        }
-      | {
-          _type: "color";
-          backgroundImage: null;
-          color: string | null;
-        }
-    >;
-    content: Array<{
-      children?: Array<{
-        marks?: Array<string>;
-        text?: string;
-        _type: "span";
-        _key: string;
-      }>;
-      style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
-      listItem?: "bullet";
-      markDefs: Array<
-        | {
-            url: string;
-            newTab?: boolean;
-            _type: "linkExternal";
-            _key: string;
-          }
-        | {
-            reference:
-              | {
-                  _ref: string;
-                  _type: "reference";
-                  _weak?: boolean;
-                  [internalGroqTypeReferenceTo]?: "home";
-                }
-              | {
-                  _ref: string;
-                  _type: "reference";
-                  _weak?: boolean;
-                  [internalGroqTypeReferenceTo]?: "page";
-                }
-              | {
-                  _ref: string;
-                  _type: "reference";
-                  _weak?: boolean;
-                  [internalGroqTypeReferenceTo]?: "plp";
-                }
-              | {
-                  _ref: string;
-                  _type: "reference";
-                  _weak?: boolean;
-                  [internalGroqTypeReferenceTo]?: "product";
-                };
-            _type: "linkInternal";
-            _key: string;
-            url: string | "/" | "/products" | null;
-          }
-      > | null;
-      level?: number;
-      _type: "block";
-      _key: string;
-    }> | null;
-    textColor: string | "black";
-  }> | null;
-  pageSeo: {
-    _type: "pageSeo";
-    title: PlaceholderString | null;
-    description: string | null;
-    ogImage: {
-      asset?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-      };
-      media?: unknown;
-      hotspot?: SanityImageHotspot;
-      crop?: SanityImageCrop;
-      alt?: string;
-      _type: "image";
-    } | null;
-  } | null;
-} | null;
+export type HOME_QUERYResult = null;
 // Variable: MODULAR_PAGE_QUERY
 // Query: *[_type == 'page' && slug.current == $slug][0]{    _type,    _id,    _updatedAt,    _createdAt,    "status": select(_id in path("drafts.**") => "draft", "published"),    "name": coalesce(name, "Untitled Page"),    "slug": slug.current,    "pageBuilder": pageBuilder[]{        _key,  _type,  "cover": cover[] {    _type,    "backgroundImage": select(_type == "backgroundImage" => {      asset,      crop,      hotspot,      alt,    }),    "color": select(_type == "color" => hex)  },  "content": content[]{    ...,    markDefs[]{      ...,      "url": select(      _type == 'linkInternal' => select(reference->._type == 'product' => '/products/' + reference->store.slug.current,        reference->._type == 'home' => '/',        reference->._type == 'page' => '/' + reference->.slug.current,        reference->._type == 'plp' => '/products',      ),      _type == 'linkExternal' => url,      )},    },  "textColor": coalesce(textColor.hex, 'black'),    },    pageSeo{  _type,  "title": coalesce(title, ^.name),  description,  ogImage}  }
-export type MODULAR_PAGE_QUERYResult = {
-  _type: "page";
-  _id: string;
-  _updatedAt: string;
-  _createdAt: string;
-  status: "draft" | "published";
-  name: string;
-  slug: string;
-  pageBuilder: Array<{
-    _key: string;
-    _type: "editorialSection";
-    cover: Array<
-      | {
-          _type: "backgroundImage";
-          backgroundImage: {
-            asset: {
-              _ref: string;
-              _type: "reference";
-              _weak?: boolean;
-              [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-            } | null;
-            crop: SanityImageCrop | null;
-            hotspot: SanityImageHotspot | null;
-            alt: string | null;
-          };
-          color: null;
-        }
-      | {
-          _type: "color";
-          backgroundImage: null;
-          color: string | null;
-        }
-    >;
-    content: Array<{
-      children?: Array<{
-        marks?: Array<string>;
-        text?: string;
-        _type: "span";
-        _key: string;
-      }>;
-      style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
-      listItem?: "bullet";
-      markDefs: Array<
-        | {
-            url: string;
-            newTab?: boolean;
-            _type: "linkExternal";
-            _key: string;
-          }
-        | {
-            reference:
-              | {
-                  _ref: string;
-                  _type: "reference";
-                  _weak?: boolean;
-                  [internalGroqTypeReferenceTo]?: "home";
-                }
-              | {
-                  _ref: string;
-                  _type: "reference";
-                  _weak?: boolean;
-                  [internalGroqTypeReferenceTo]?: "page";
-                }
-              | {
-                  _ref: string;
-                  _type: "reference";
-                  _weak?: boolean;
-                  [internalGroqTypeReferenceTo]?: "plp";
-                }
-              | {
-                  _ref: string;
-                  _type: "reference";
-                  _weak?: boolean;
-                  [internalGroqTypeReferenceTo]?: "product";
-                };
-            _type: "linkInternal";
-            _key: string;
-            url: string | "/" | "/products" | null;
-          }
-      > | null;
-      level?: number;
-      _type: "block";
-      _key: string;
-    }> | null;
-    textColor: string | "black";
-  }> | null;
-  pageSeo: {
-    _type: "pageSeo";
-    title: PlaceholderString | string;
-    description: string | null;
-    ogImage: {
-      asset?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-      };
-      media?: unknown;
-      hotspot?: SanityImageHotspot;
-      crop?: SanityImageCrop;
-      alt?: string;
-      _type: "image";
-    } | null;
-  } | null;
-} | null;
+export type MODULAR_PAGE_QUERYResult = null;
 // Variable: COLLECTION_QUERY
 // Query: *[_type == 'collection' && slug.current == $slug][0]{    _type,    _id,    _updatedAt,    _createdAt,    "status": select(_id in path("drafts.**") => "draft", "published"),    "name": coalesce(name, "Untitled Collection"),    "slug": slug.current,    "editorial": {      "_type":'page',      _id,      _updatedAt,      _createdAt,      "status": select(_id in path("drafts.**") => "draft", "published"),      "name": coalesce(name, "Untitled Page"),      "slug": store.slug.current,      pageBuilder[]{          _key,  _type,  "cover": cover[] {    _type,    "backgroundImage": select(_type == "backgroundImage" => {      asset,      crop,      hotspot,      alt,    }),    "color": select(_type == "color" => hex)  },  "content": content[]{    ...,    markDefs[]{      ...,      "url": select(      _type == 'linkInternal' => select(reference->._type == 'product' => '/products/' + reference->store.slug.current,        reference->._type == 'home' => '/',        reference->._type == 'page' => '/' + reference->.slug.current,        reference->._type == 'plp' => '/products',      ),      _type == 'linkExternal' => url,      )},    },  "textColor": coalesce(textColor.hex, 'black'),      },    },    pageSeo{  _type,  "title": coalesce(title, ^.name),  description,  ogImage}  }
-export type COLLECTION_QUERYResult = {
-  _type: "collection";
-  _id: string;
-  _updatedAt: string;
-  _createdAt: string;
-  status: "draft" | "published";
-  name: "Untitled Collection";
-  slug: null;
-  editorial: {
-    _type: "page";
-    _id: string;
-    _updatedAt: string;
-    _createdAt: string;
-    status: "draft" | "published";
-    name: "Untitled Page";
-    slug: string | null;
-    pageBuilder: Array<{
-      _key: string;
-      _type: "editorialSection";
-      cover: Array<
-        | {
-            _type: "backgroundImage";
-            backgroundImage: {
-              asset: {
-                _ref: string;
-                _type: "reference";
-                _weak?: boolean;
-                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-              } | null;
-              crop: SanityImageCrop | null;
-              hotspot: SanityImageHotspot | null;
-              alt: string | null;
-            };
-            color: null;
-          }
-        | {
-            _type: "color";
-            backgroundImage: null;
-            color: string | null;
-          }
-      >;
-      content: Array<{
-        children?: Array<{
-          marks?: Array<string>;
-          text?: string;
-          _type: "span";
-          _key: string;
-        }>;
-        style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
-        listItem?: "bullet";
-        markDefs: Array<
-          | {
-              url: string;
-              newTab?: boolean;
-              _type: "linkExternal";
-              _key: string;
-            }
-          | {
-              reference:
-                | {
-                    _ref: string;
-                    _type: "reference";
-                    _weak?: boolean;
-                    [internalGroqTypeReferenceTo]?: "home";
-                  }
-                | {
-                    _ref: string;
-                    _type: "reference";
-                    _weak?: boolean;
-                    [internalGroqTypeReferenceTo]?: "page";
-                  }
-                | {
-                    _ref: string;
-                    _type: "reference";
-                    _weak?: boolean;
-                    [internalGroqTypeReferenceTo]?: "plp";
-                  }
-                | {
-                    _ref: string;
-                    _type: "reference";
-                    _weak?: boolean;
-                    [internalGroqTypeReferenceTo]?: "product";
-                  };
-              _type: "linkInternal";
-              _key: string;
-              url: string | "/" | "/products" | null;
-            }
-        > | null;
-        level?: number;
-        _type: "block";
-        _key: string;
-      }> | null;
-      textColor: string | "black";
-    }> | null;
-  };
-  pageSeo: null;
-} | null;
+export type COLLECTION_QUERYResult = null;
 // Variable: ALL_COLLECTIONS_QUERY
 // Query: *[_type == "collection" && defined(store.slug.current)] | order(date desc, _updatedAt desc) {    ...,  }
-export type ALL_COLLECTIONS_QUERYResult = Array<{
-  _id: string;
-  _type: "collection";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  hidden?: string;
-  titleProxy?: ProxyString;
-  slugProxy?: ProxyString;
-  pageBuilder?: Array<
-    {
-      _key: string;
-    } & EditorialSection
-  >;
-  store?: ShopifyCollection;
-}>;
+export type ALL_COLLECTIONS_QUERYResult = Array<never>;
 // Variable: ALL_PRODUCTS_QUERY
 // Query: *[_type == "product" && defined(store.slug.current)] | order(date desc, _updatedAt desc) {    ...,  }
-export type ALL_PRODUCTS_QUERYResult = Array<{
-  _id: string;
-  _type: "product";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  titleProxy?: ProxyString;
-  slugProxy?: ProxyString;
-  pageBuilder?: Array<
-    {
-      _key: string;
-    } & EditorialSection
-  >;
-  store?: ShopifyProduct;
-}>;
+export type ALL_PRODUCTS_QUERYResult = Array<never>;
 // Variable: MORE_PRODUCTS_QUERY
 // Query: *[_type == "product" && _id != $skip && defined(store.slug.current)] | order(date desc, _updatedAt desc) [0...$limit] {    ...,  }
-export type MORE_PRODUCTS_QUERYResult = Array<{
-  _id: string;
-  _type: "product";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  titleProxy?: ProxyString;
-  slugProxy?: ProxyString;
-  pageBuilder?: Array<
-    {
-      _key: string;
-    } & EditorialSection
-  >;
-  store?: ShopifyProduct;
-}>;
+export type MORE_PRODUCTS_QUERYResult = Array<never>;
 // Variable: PRODUCT_QUERY
 // Query: *[_type == "product" && store.slug.current == $slug] [0] {    _type,    _id,    _updatedAt,    _createdAt,    "status": select(_id in path("drafts.**") => "draft", "published"),    "name": coalesce(name, "Untitled Page"),    "slug": store.slug.current,    pageBuilder[]{        _key,  _type,  "cover": cover[] {    _type,    "backgroundImage": select(_type == "backgroundImage" => {      asset,      crop,      hotspot,      alt,    }),    "color": select(_type == "color" => hex)  },  "content": content[]{    ...,    markDefs[]{      ...,      "url": select(      _type == 'linkInternal' => select(reference->._type == 'product' => '/products/' + reference->store.slug.current,        reference->._type == 'home' => '/',        reference->._type == 'page' => '/' + reference->.slug.current,        reference->._type == 'plp' => '/products',      ),      _type == 'linkExternal' => url,      )},    },  "textColor": coalesce(textColor.hex, 'black'),    },    pageSeo{  _type,  "title": coalesce(title, ^.name),  description,  ogImage}  }
-export type PRODUCT_QUERYResult = {
-  _type: "product";
-  _id: string;
-  _updatedAt: string;
-  _createdAt: string;
-  status: "draft" | "published";
-  name: "Untitled Page";
-  slug: string | null;
-  pageBuilder: Array<{
-    _key: string;
-    _type: "editorialSection";
-    cover: Array<
-      | {
-          _type: "backgroundImage";
-          backgroundImage: {
-            asset: {
-              _ref: string;
-              _type: "reference";
-              _weak?: boolean;
-              [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-            } | null;
-            crop: SanityImageCrop | null;
-            hotspot: SanityImageHotspot | null;
-            alt: string | null;
-          };
-          color: null;
-        }
-      | {
-          _type: "color";
-          backgroundImage: null;
-          color: string | null;
-        }
-    >;
-    content: Array<{
-      children?: Array<{
-        marks?: Array<string>;
-        text?: string;
-        _type: "span";
-        _key: string;
-      }>;
-      style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
-      listItem?: "bullet";
-      markDefs: Array<
-        | {
-            url: string;
-            newTab?: boolean;
-            _type: "linkExternal";
-            _key: string;
-          }
-        | {
-            reference:
-              | {
-                  _ref: string;
-                  _type: "reference";
-                  _weak?: boolean;
-                  [internalGroqTypeReferenceTo]?: "home";
-                }
-              | {
-                  _ref: string;
-                  _type: "reference";
-                  _weak?: boolean;
-                  [internalGroqTypeReferenceTo]?: "page";
-                }
-              | {
-                  _ref: string;
-                  _type: "reference";
-                  _weak?: boolean;
-                  [internalGroqTypeReferenceTo]?: "plp";
-                }
-              | {
-                  _ref: string;
-                  _type: "reference";
-                  _weak?: boolean;
-                  [internalGroqTypeReferenceTo]?: "product";
-                };
-            _type: "linkInternal";
-            _key: string;
-            url: string | "/" | "/products" | null;
-          }
-      > | null;
-      level?: number;
-      _type: "block";
-      _key: string;
-    }> | null;
-    textColor: string | "black";
-  }> | null;
-  pageSeo: null;
-} | null;
+export type PRODUCT_QUERYResult = null;
 // Variable: PRODUCT_METADATA_QUERY
 // Query: *[_type == "product" && store.slug.current == $slug] [0] {    _type,    _id,    store  }
-export type PRODUCT_METADATA_QUERYResult = {
-  _type: "product";
-  _id: string;
-  store: ShopifyProduct | null;
-} | null;
+export type PRODUCT_METADATA_QUERYResult = null;
 // Variable: ALL_PRODUCT_PAGES_SLUGS
 // Query: *[_type == "product" && defined(store.slug.current)]  {"slug": store.slug.current}
-export type ALL_PRODUCT_PAGES_SLUGSResult = Array<{
-  slug: string | null;
-}>;
+export type ALL_PRODUCT_PAGES_SLUGSResult = Array<never>;
 // Variable: ALL_PAGES_SLUGS
 // Query: *[_type == "page" && defined(slug.current)]  {"slug": slug.current}
-export type ALL_PAGES_SLUGSResult = Array<{
+export type ALL_PAGES_SLUGSResult = Array<never>;
+// Variable: ALL_POLYTECHNICS_QUERY
+// Query: *[_type == "polytechnic" && isActive == true] | order(name asc) {    _id,    _type,    name,    shortName,    "slug": slug.current,    description,    address,    website,    "image": image { asset->{ url } },    "logo": logo { asset->{ url } },    color  }
+export type ALL_POLYTECHNICS_QUERYResult = Array<{
+  _id: string;
+  _type: "polytechnic";
+  name: string;
+  shortName: string;
   slug: string;
+  description: string | null;
+  address: string | null;
+  website: string | null;
+  image: {
+    asset: {
+      url: string | null;
+    } | null;
+  } | null;
+  logo: {
+    asset: {
+      url: string | null;
+    } | null;
+  } | null;
+  color: string | null;
 }>;
+// Variable: POLYTECHNIC_QUERY
+// Query: *[_type == "polytechnic" && slug.current == $slug][0] {    _id,    _type,    name,    shortName,    "slug": slug.current,    description,    address,    website,    "image": image { asset->{ url } },    "logo": logo { asset->{ url } },    color,    "canteens": *[_type == "canteen" && polytechnic._ref == ^._id && isActive == true] | order(name asc) {      _id,      name,      "slug": slug.current,      description,      location,      openingHours,      "image": image { asset->{ url } }    }  }
+export type POLYTECHNIC_QUERYResult = {
+  _id: string;
+  _type: "polytechnic";
+  name: string;
+  shortName: string;
+  slug: string;
+  description: string | null;
+  address: string | null;
+  website: string | null;
+  image: {
+    asset: {
+      url: string | null;
+    } | null;
+  } | null;
+  logo: {
+    asset: {
+      url: string | null;
+    } | null;
+  } | null;
+  color: string | null;
+  canteens: Array<{
+    _id: string;
+    name: string;
+    slug: string;
+    description: string | null;
+    location: string | null;
+    openingHours: string | null;
+    image: {
+      asset: {
+        url: string | null;
+      } | null;
+    } | null;
+  }>;
+} | null;
+// Variable: ALL_CANTEENS_QUERY
+// Query: *[_type == "canteen" && isActive == true] | order(name asc) {    _id,    _type,    name,    "slug": slug.current,    description,    location,    openingHours,    "image": image { asset->{ url } },    "polytechnic": polytechnic->{      _id,      name,      shortName,      "slug": slug.current    }  }
+export type ALL_CANTEENS_QUERYResult = Array<{
+  _id: string;
+  _type: "canteen";
+  name: string;
+  slug: string;
+  description: string | null;
+  location: string | null;
+  openingHours: string | null;
+  image: {
+    asset: {
+      url: string | null;
+    } | null;
+  } | null;
+  polytechnic: {
+    _id: string;
+    name: string;
+    shortName: string;
+    slug: string;
+  };
+}>;
+// Variable: CANTEEN_QUERY
+// Query: *[_type == "canteen" && slug.current == $slug][0] {    _id,    _type,    name,    "slug": slug.current,    description,    location,    openingHours,    "image": image { asset->{ url } },    "polytechnic": polytechnic->{      _id,      name,      shortName,      "slug": slug.current    },    "stores": *[_type == "store" && canteen._ref == ^._id && isActive == true] | order(name asc) {      _id,      name,      "slug": slug.current,      description,      cuisine,      stallNumber,      "image": image { asset->{ url } },      contactNumber    }  }
+export type CANTEEN_QUERYResult = {
+  _id: string;
+  _type: "canteen";
+  name: string;
+  slug: string;
+  description: string | null;
+  location: string | null;
+  openingHours: string | null;
+  image: {
+    asset: {
+      url: string | null;
+    } | null;
+  } | null;
+  polytechnic: {
+    _id: string;
+    name: string;
+    shortName: string;
+    slug: string;
+  };
+  stores: Array<{
+    _id: string;
+    name: string;
+    slug: string;
+    description: string | null;
+    cuisine: string | null;
+    stallNumber: string | null;
+    image: {
+      asset: {
+        url: string | null;
+      } | null;
+    } | null;
+    contactNumber: string | null;
+  }>;
+} | null;
+// Variable: ALL_STORES_QUERY
+// Query: *[_type == "store" && isActive == true] | order(name asc) {    _id,    _type,    name,    "slug": slug.current,    description,    cuisine,    stallNumber,    "image": image { asset->{ url } },    contactNumber,    "canteen": canteen->{      _id,      name,      "slug": slug.current,      "polytechnic": polytechnic->{        _id,        name,        shortName,        "slug": slug.current      }    }  }
+export type ALL_STORES_QUERYResult = Array<{
+  _id: string;
+  _type: "store";
+  name: string;
+  slug: string;
+  description: string | null;
+  cuisine: string | null;
+  stallNumber: string | null;
+  image: {
+    asset: {
+      url: string | null;
+    } | null;
+  } | null;
+  contactNumber: string | null;
+  canteen: {
+    _id: string;
+    name: string;
+    slug: string;
+    polytechnic: {
+      _id: string;
+      name: string;
+      shortName: string;
+      slug: string;
+    };
+  };
+}>;
+// Variable: STORE_QUERY
+// Query: *[_type == "store" && slug.current == $slug][0] {    _id,    _type,    name,    "slug": slug.current,    description,    cuisine,    stallNumber,    "image": image { asset->{ url } },    contactNumber,    "canteen": canteen->{      _id,      name,      "slug": slug.current,      "polytechnic": polytechnic->{        _id,        name,        shortName,        "slug": slug.current      }    },    "products": *[_type == "foodProduct" && store._ref == ^._id && isAvailable == true] | order(name asc) {      _id,      name,      "slug": slug.current,      description,      price,      "image": image { asset->{ url } },      category,      isVegetarian,      isHalal,      spicyLevel,      preparationTime    }  }
+export type STORE_QUERYResult = {
+  _id: string;
+  _type: "store";
+  name: string;
+  slug: string;
+  description: string | null;
+  cuisine: string | null;
+  stallNumber: string | null;
+  image: {
+    asset: {
+      url: string | null;
+    } | null;
+  } | null;
+  contactNumber: string | null;
+  canteen: {
+    _id: string;
+    name: string;
+    slug: string;
+    polytechnic: {
+      _id: string;
+      name: string;
+      shortName: string;
+      slug: string;
+    };
+  };
+  products: Array<{
+    _id: string;
+    name: string;
+    slug: string;
+    description: string | null;
+    price: number;
+    image: {
+      asset: {
+        url: string | null;
+      } | null;
+    } | null;
+    category: "beverage" | "dessert" | "main" | "side" | "snack" | null;
+    isVegetarian: boolean | null;
+    isHalal: boolean | null;
+    spicyLevel: 0 | 1 | 2 | 3 | 4 | null;
+    preparationTime: number | null;
+  }>;
+} | null;
+// Variable: ALL_FOOD_PRODUCTS_QUERY
+// Query: *[_type == "foodProduct" && isAvailable == true] | order(name asc) {    _id,    _type,    name,    "slug": slug.current,    description,    price,    image,    category,    isVegetarian,    isHalal,    spicyLevel,    preparationTime,    shopifyVariantId,    addOnOptions,    "store": store->{      _id,      name,      "slug": slug.current,      "canteen": canteen->{        _id,        name,        "slug": slug.current,        "polytechnic": polytechnic->{          _id,          name,          shortName,          "slug": slug.current        }      }    }  }
+export type ALL_FOOD_PRODUCTS_QUERYResult = Array<{
+  _id: string;
+  _type: "foodProduct";
+  name: string;
+  slug: string;
+  description: string | null;
+  price: number;
+  image: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  } | null;
+  category: "beverage" | "dessert" | "main" | "side" | "snack" | null;
+  isVegetarian: boolean | null;
+  isHalal: boolean | null;
+  spicyLevel: 0 | 1 | 2 | 3 | 4 | null;
+  preparationTime: number | null;
+  shopifyVariantId: string | null;
+  addOnOptions: Array<string> | null;
+  store: {
+    _id: string;
+    name: string;
+    slug: string;
+    canteen: {
+      _id: string;
+      name: string;
+      slug: string;
+      polytechnic: {
+        _id: string;
+        name: string;
+        shortName: string;
+        slug: string;
+      };
+    };
+  };
+}>;
+// Variable: FOOD_PRODUCT_QUERY
+// Query: *[_type == "foodProduct" && slug.current == $slug][0] {    _id,    _type,    name,    "slug": slug.current,    description,    price,    image,    category,    isVegetarian,    isHalal,    spicyLevel,    isAvailable,    preparationTime,    shopifyVariantId,    addOnOptions,    "store": store->{      _id,      name,      "slug": slug.current,      "canteen": canteen->{        _id,        name,        "slug": slug.current,        "polytechnic": polytechnic->{          _id,          name,          shortName,          "slug": slug.current        }      }    }  }
+export type FOOD_PRODUCT_QUERYResult = {
+  _id: string;
+  _type: "foodProduct";
+  name: string;
+  slug: string;
+  description: string | null;
+  price: number;
+  image: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  } | null;
+  category: "beverage" | "dessert" | "main" | "side" | "snack" | null;
+  isVegetarian: boolean | null;
+  isHalal: boolean | null;
+  spicyLevel: 0 | 1 | 2 | 3 | 4 | null;
+  isAvailable: boolean | null;
+  preparationTime: number | null;
+  shopifyVariantId: string | null;
+  addOnOptions: Array<string> | null;
+  store: {
+    _id: string;
+    name: string;
+    slug: string;
+    canteen: {
+      _id: string;
+      name: string;
+      slug: string;
+      polytechnic: {
+        _id: string;
+        name: string;
+        shortName: string;
+        slug: string;
+      };
+    };
+  };
+} | null;
+// Variable: STORE_BY_VENDOR_EMAIL_QUERY
+// Query: *[_type == "store" && vendorEmail == $email][0] {    _id,    name,    "slug": slug.current,    vendorEmail  }
+export type STORE_BY_VENDOR_EMAIL_QUERYResult = {
+  _id: string;
+  name: string;
+  slug: string;
+  vendorEmail: string | null;
+} | null;
 
 // Query TypeMap
 import "@sanity/client";
@@ -1172,5 +631,14 @@ declare module "@sanity/client" {
     '\n  *[_type == "product" && store.slug.current == $slug] [0] {\n    _type,\n    _id,\n    store\n  }\n': PRODUCT_METADATA_QUERYResult;
     '\n  *[_type == "product" && defined(store.slug.current)]\n  {"slug": store.slug.current}\n': ALL_PRODUCT_PAGES_SLUGSResult;
     '\n  *[_type == "page" && defined(slug.current)]\n  {"slug": slug.current}\n': ALL_PAGES_SLUGSResult;
+    '\n  *[_type == "polytechnic" && isActive == true] | order(name asc) {\n    _id,\n    _type,\n    name,\n    shortName,\n    "slug": slug.current,\n    description,\n    address,\n    website,\n    "image": image { asset->{ url } },\n    "logo": logo { asset->{ url } },\n    color\n  }\n': ALL_POLYTECHNICS_QUERYResult;
+    '\n  *[_type == "polytechnic" && slug.current == $slug][0] {\n    _id,\n    _type,\n    name,\n    shortName,\n    "slug": slug.current,\n    description,\n    address,\n    website,\n    "image": image { asset->{ url } },\n    "logo": logo { asset->{ url } },\n    color,\n    "canteens": *[_type == "canteen" && polytechnic._ref == ^._id && isActive == true] | order(name asc) {\n      _id,\n      name,\n      "slug": slug.current,\n      description,\n      location,\n      openingHours,\n      "image": image { asset->{ url } }\n    }\n  }\n': POLYTECHNIC_QUERYResult;
+    '\n  *[_type == "canteen" && isActive == true] | order(name asc) {\n    _id,\n    _type,\n    name,\n    "slug": slug.current,\n    description,\n    location,\n    openingHours,\n    "image": image { asset->{ url } },\n    "polytechnic": polytechnic->{\n      _id,\n      name,\n      shortName,\n      "slug": slug.current\n    }\n  }\n': ALL_CANTEENS_QUERYResult;
+    '\n  *[_type == "canteen" && slug.current == $slug][0] {\n    _id,\n    _type,\n    name,\n    "slug": slug.current,\n    description,\n    location,\n    openingHours,\n    "image": image { asset->{ url } },\n    "polytechnic": polytechnic->{\n      _id,\n      name,\n      shortName,\n      "slug": slug.current\n    },\n    "stores": *[_type == "store" && canteen._ref == ^._id && isActive == true] | order(name asc) {\n      _id,\n      name,\n      "slug": slug.current,\n      description,\n      cuisine,\n      stallNumber,\n      "image": image { asset->{ url } },\n      contactNumber\n    }\n  }\n': CANTEEN_QUERYResult;
+    '\n  *[_type == "store" && isActive == true] | order(name asc) {\n    _id,\n    _type,\n    name,\n    "slug": slug.current,\n    description,\n    cuisine,\n    stallNumber,\n    "image": image { asset->{ url } },\n    contactNumber,\n    "canteen": canteen->{\n      _id,\n      name,\n      "slug": slug.current,\n      "polytechnic": polytechnic->{\n        _id,\n        name,\n        shortName,\n        "slug": slug.current\n      }\n    }\n  }\n': ALL_STORES_QUERYResult;
+    '\n  *[_type == "store" && slug.current == $slug][0] {\n    _id,\n    _type,\n    name,\n    "slug": slug.current,\n    description,\n    cuisine,\n    stallNumber,\n    "image": image { asset->{ url } },\n    contactNumber,\n    "canteen": canteen->{\n      _id,\n      name,\n      "slug": slug.current,\n      "polytechnic": polytechnic->{\n        _id,\n        name,\n        shortName,\n        "slug": slug.current\n      }\n    },\n    "products": *[_type == "foodProduct" && store._ref == ^._id && isAvailable == true] | order(name asc) {\n      _id,\n      name,\n      "slug": slug.current,\n      description,\n      price,\n      "image": image { asset->{ url } },\n      category,\n      isVegetarian,\n      isHalal,\n      spicyLevel,\n      preparationTime\n    }\n  }\n': STORE_QUERYResult;
+    '\n  *[_type == "foodProduct" && isAvailable == true] | order(name asc) {\n    _id,\n    _type,\n    name,\n    "slug": slug.current,\n    description,\n    price,\n    image,\n    category,\n    isVegetarian,\n    isHalal,\n    spicyLevel,\n    preparationTime,\n    shopifyVariantId,\n    addOnOptions,\n    "store": store->{\n      _id,\n      name,\n      "slug": slug.current,\n      "canteen": canteen->{\n        _id,\n        name,\n        "slug": slug.current,\n        "polytechnic": polytechnic->{\n          _id,\n          name,\n          shortName,\n          "slug": slug.current\n        }\n      }\n    }\n  }\n': ALL_FOOD_PRODUCTS_QUERYResult;
+    '\n  *[_type == "foodProduct" && slug.current == $slug][0] {\n    _id,\n    _type,\n    name,\n    "slug": slug.current,\n    description,\n    price,\n    image,\n    category,\n    isVegetarian,\n    isHalal,\n    spicyLevel,\n    isAvailable,\n    preparationTime,\n    shopifyVariantId,\n    addOnOptions,\n    "store": store->{\n      _id,\n      name,\n      "slug": slug.current,\n      "canteen": canteen->{\n        _id,\n        name,\n        "slug": slug.current,\n        "polytechnic": polytechnic->{\n          _id,\n          name,\n          shortName,\n          "slug": slug.current\n        }\n      }\n    }\n  }\n': FOOD_PRODUCT_QUERYResult;
+    '\n  *[_type == "store" && vendorEmail == $email][0] {\n    _id,\n    name,\n    "slug": slug.current,\n    vendorEmail\n  }\n': STORE_BY_VENDOR_EMAIL_QUERYResult;
   }
 }

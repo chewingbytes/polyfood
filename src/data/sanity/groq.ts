@@ -200,3 +200,237 @@ export const ALL_PAGES_SLUGS = defineQuery(`
   *[_type == "page" && defined(slug.current)]
   {"slug": slug.current}
 `);
+
+// Food at Poly Queries
+export const ALL_POLYTECHNICS_QUERY = defineQuery(`
+  *[_type == "polytechnic" && isActive == true] | order(name asc) {
+    _id,
+    _type,
+    name,
+    shortName,
+    "slug": slug.current,
+    description,
+    address,
+    website,
+    "image": image { asset->{ url } },
+    "logo": logo { asset->{ url } },
+    color
+  }
+`);
+
+export const POLYTECHNIC_QUERY = defineQuery(`
+  *[_type == "polytechnic" && slug.current == $slug][0] {
+    _id,
+    _type,
+    name,
+    shortName,
+    "slug": slug.current,
+    description,
+    address,
+    website,
+    "image": image { asset->{ url } },
+    "logo": logo { asset->{ url } },
+    color,
+    "canteens": *[_type == "canteen" && polytechnic._ref == ^._id && isActive == true] | order(name asc) {
+      _id,
+      name,
+      "slug": slug.current,
+      description,
+      location,
+      openingHours,
+      "image": image { asset->{ url } }
+    }
+  }
+`);
+
+export const ALL_CANTEENS_QUERY = defineQuery(`
+  *[_type == "canteen" && isActive == true] | order(name asc) {
+    _id,
+    _type,
+    name,
+    "slug": slug.current,
+    description,
+    location,
+    openingHours,
+    "image": image { asset->{ url } },
+    "polytechnic": polytechnic->{
+      _id,
+      name,
+      shortName,
+      "slug": slug.current
+    }
+  }
+`);
+
+export const CANTEEN_QUERY = defineQuery(`
+  *[_type == "canteen" && slug.current == $slug][0] {
+    _id,
+    _type,
+    name,
+    "slug": slug.current,
+    description,
+    location,
+    openingHours,
+    "image": image { asset->{ url } },
+    "polytechnic": polytechnic->{
+      _id,
+      name,
+      shortName,
+      "slug": slug.current
+    },
+    "stores": *[_type == "store" && canteen._ref == ^._id && isActive == true] | order(name asc) {
+      _id,
+      name,
+      "slug": slug.current,
+      description,
+      cuisine,
+      stallNumber,
+      "image": image { asset->{ url } },
+      contactNumber
+    }
+  }
+`);
+
+export const ALL_STORES_QUERY = defineQuery(`
+  *[_type == "store" && isActive == true] | order(name asc) {
+    _id,
+    _type,
+    name,
+    "slug": slug.current,
+    description,
+    cuisine,
+    stallNumber,
+    "image": image { asset->{ url } },
+    contactNumber,
+    "canteen": canteen->{
+      _id,
+      name,
+      "slug": slug.current,
+      "polytechnic": polytechnic->{
+        _id,
+        name,
+        shortName,
+        "slug": slug.current
+      }
+    }
+  }
+`);
+
+export const STORE_QUERY = defineQuery(`
+  *[_type == "store" && slug.current == $slug][0] {
+    _id,
+    _type,
+    name,
+    "slug": slug.current,
+    description,
+    cuisine,
+    stallNumber,
+    "image": image { asset->{ url } },
+    contactNumber,
+    "canteen": canteen->{
+      _id,
+      name,
+      "slug": slug.current,
+      "polytechnic": polytechnic->{
+        _id,
+        name,
+        shortName,
+        "slug": slug.current
+      }
+    },
+    "products": *[_type == "foodProduct" && store._ref == ^._id && isAvailable == true] | order(name asc) {
+      _id,
+      name,
+      "slug": slug.current,
+      description,
+      price,
+      "image": image { asset->{ url } },
+      category,
+      isVegetarian,
+      isHalal,
+      spicyLevel,
+      preparationTime
+    }
+  }
+`);
+
+export const ALL_FOOD_PRODUCTS_QUERY = defineQuery(`
+  *[_type == "foodProduct" && isAvailable == true] | order(name asc) {
+    _id,
+    _type,
+    name,
+    "slug": slug.current,
+    description,
+    price,
+    image,
+    category,
+    isVegetarian,
+    isHalal,
+    spicyLevel,
+    preparationTime,
+    shopifyVariantId,
+    addOnOptions,
+    "store": store->{
+      _id,
+      name,
+      "slug": slug.current,
+      "canteen": canteen->{
+        _id,
+        name,
+        "slug": slug.current,
+        "polytechnic": polytechnic->{
+          _id,
+          name,
+          shortName,
+          "slug": slug.current
+        }
+      }
+    }
+  }
+`);
+
+export const FOOD_PRODUCT_QUERY = defineQuery(`
+  *[_type == "foodProduct" && slug.current == $slug][0] {
+    _id,
+    _type,
+    name,
+    "slug": slug.current,
+    description,
+    price,
+    image,
+    category,
+    isVegetarian,
+    isHalal,
+    spicyLevel,
+    isAvailable,
+    preparationTime,
+    shopifyVariantId,
+    addOnOptions,
+    "store": store->{
+      _id,
+      name,
+      "slug": slug.current,
+      "canteen": canteen->{
+        _id,
+        name,
+        "slug": slug.current,
+        "polytechnic": polytechnic->{
+          _id,
+          name,
+          shortName,
+          "slug": slug.current
+        }
+      }
+    }
+  }
+`);
+
+/** Returns the store whose vendorEmail matches the authenticated vendor's email address. */
+export const STORE_BY_VENDOR_EMAIL_QUERY = defineQuery(`
+  *[_type == "store" && vendorEmail == $email][0] {
+    _id,
+    name,
+    "slug": slug.current,
+    vendorEmail
+  }
+`);

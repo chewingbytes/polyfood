@@ -1,0 +1,100 @@
+---
+import { getPolytechnic } from "../../data/sanity";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const { slug } = Astro.params;
+
+if (!slug) {
+  return Astro.redirect("/polytechnics");
+}
+
+const polytechnic = (await getPolytechnic(slug)).data;
+
+if (!polytechnic) {
+  return Astro.redirect("/404");
+}
+---
+
+<BaseLayout title={`${polytechnic.name} - Food at Poly`}>
+  <div class="container mx-auto px-4 py-16">
+    <nav class="mb-8">
+      <a href="/polytechnics" class="btn btn-secondary text-sm">
+        ← Back to Polytechnics
+      </a>
+    </nav>
+
+    <div class="mb-16 border-4 border-neo-ink bg-white p-8 shadow-neo-lg">
+      <div class="grid grid-cols-1 items-center gap-8 md:grid-cols-3">
+        <div class="md:col-span-2">
+          <h1 class="mb-2 text-6xl md:text-8xl">{polytechnic.name}</h1>
+          <p class="mb-4 text-3xl text-neo-accent">{polytechnic.shortName}</p>
+          
+          {polytechnic.description && (
+            <p class="mb-4 max-w-2xl text-lg">{polytechnic.description}</p>
+          )}
+          
+          <div class="mt-6 flex flex-wrap items-center gap-4">
+            {polytechnic.address && (
+              <p class="text-md">📍 {polytechnic.address}</p>
+            )}
+            {polytechnic.website && (
+              <a 
+                href={polytechnic.website} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                class="btn btn-primary"
+              >
+                Visit Website →
+              </a>
+            )}
+          </div>
+        </div>
+        {polytechnic.logo && (
+          <div class="hidden md:block">
+            <img 
+              src={polytechnic.logo.asset?.url} 
+              alt={`${polytechnic.name} Logo`}
+              class="h-48 w-48 object-contain"
+            />
+          </div>
+        )}
+      </div>
+    </div>
+
+    <div>
+      <h2 class="mb-8 text-5xl">Canteens</h2>
+      
+      {polytechnic.canteens && polytechnic.canteens.length > 0 ? (
+        <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {polytechnic.canteens.map((canteen) => (
+            <a 
+              href={`/canteens/${canteen.slug}`}
+              class="card"
+            >
+              {canteen.image && (
+                <img 
+                  src={canteen.image.asset?.url} 
+                  alt={canteen.name}
+                  class="h-48 w-full border-b-4 border-neo-ink object-cover"
+                />
+              )}
+              <div class="p-6">
+                <h3 class="mb-2 text-3xl">{canteen.name}</h3>
+                {canteen.location && (
+                  <p class="mb-2 text-neo-ink/70">📍 {canteen.location}</p>
+                )}
+                {canteen.openingHours && (
+                  <p class="text-sm text-neo-ink/50">🕒 {canteen.openingHours}</p>
+                )}
+              </div>
+            </a>
+          ))}
+        </div>
+      ) : (
+        <div class="border-4 border-dashed border-neo-ink/50 bg-white p-12 text-center">
+          <p class="text-xl text-neo-ink/70">No canteens available yet.</p>
+        </div>
+      )}
+    </div>
+  </div>
+</BaseLayout>

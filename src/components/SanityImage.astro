@@ -1,9 +1,8 @@
 ---
-import type { BackgroundImage } from "../data/sanity/types.generated";
 import { getSanityImage } from "../utils/getSanityImage";
 
 interface Props {
-  node: BackgroundImage["asset"];
+  node: { _ref: string; _type: string } | undefined | null;
   alt?: string | null;
   width?: number;
   fit?: "cover" | "contain";

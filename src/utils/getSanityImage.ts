@@ -1,10 +1,9 @@
 import imageUrlBuilder from "@sanity/image-url";
 import type { ImageUrlBuilder } from "@sanity/image-url/lib/types/builder";
 import { sanityClient as client } from "sanity:client";
-import type { BackgroundImage } from "../data/sanity/types.generated";
 
 interface Props {
-  node: BackgroundImage["asset"];
+  node: { _ref: string; _type: string } | undefined | null;
   width?: number;
 }
 

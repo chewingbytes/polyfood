@@ -23,3 +23,6 @@ pnpm-debug.log*
 # Typegen
 /sanity/schema.json
 /*.generated.ts
+
+# Local Netlify folder
+.netlify

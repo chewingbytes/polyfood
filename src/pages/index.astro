@@ -1,24 +1,241 @@
 ---
-import { getHomePage } from "../data/sanity";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import PageBuilder from "../components/PageBuilder.astro";
+import { getAllFoodProducts } from "../data/sanity";
 
-import { setCache } from "../utils/cache";
+// Fetch all food products
+const allProducts = (await getAllFoodProducts()).data || [];
 
-const defaultTitle = "Astro + Shopify";
+// Group products by polytechnic
+const productsByPoly: Record<string, any[]> = {};
+allProducts.forEach((product) => {
+  const polySlug = product.store?.canteen?.polytechnic?.slug;
+  if (polySlug) {
+    if (!productsByPoly[polySlug]) {
+      productsByPoly[polySlug] = [];
+    }
+    productsByPoly[polySlug].push(product);
+  }
+});
 
-const homePage = (await getHomePage()).data;
+// Top Favorites Overall - one random product from each poly
+const topFavorites = Object.keys(productsByPoly).map((polySlug) => {
+  const products = productsByPoly[polySlug];
+  const randomProduct = products[Math.floor(Math.random() * products.length)];
+  return randomProduct;
+}).filter(Boolean).slice(0, 6);
 
-if (!homePage) {
-  Astro.redirect("/404");
-}
-
-const title = homePage?.pageSeo?.title || defaultTitle;
-const pageBuilder = homePage?.pageBuilder;
-
-setCache.short(Astro);
+// Polytechnic data for sections
+const polytechnics = [
+  { slug: "sp", shortName: "SP", name: "Singapore Polytechnic" },
+  { slug: "np", shortName: "NP", name: "Ngee Ann Polytechnic" },
+  { slug: "tp", shortName: "TP", name: "Temasek Polytechnic" },
+  { slug: "nyp", shortName: "NYP", name: "Nanyang Polytechnic" },
+  { slug: "rp", shortName: "RP", name: "Republic Polytechnic" },
+];
 ---
 
-<BaseLayout title={title}
-  >{pageBuilder && <PageBuilder {pageBuilder} />}</BaseLayout
->
+<BaseLayout title="Food at Poly — Singapore Polytechnic Food Ordering">
+  <section class="border-b-4 border-black bg-[#FFFDF5]">
+        <div
+      class="absolute inset-0 pointer-events-none"
+      style="background-image: linear-gradient(rgba(0,0,0,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.06) 1px, transparent 1px); background-size: 40px 40px;"
+    >
+    </div>
+    <div class="mx-auto max-w-7xl px-4 py-24 md:py-36">
+      <div class="max-w-3xl">
+        <div class="mb-6 inline-block -rotate-1 border-4 border-black bg-red-400 px-4 py-1 text-sm font-black uppercase tracking-widest text-black shadow-[4px_4px_0px_0px_#000]">
+          Singapore Polytechnics
+        </div>
+        <h1 class="mb-6 text-6xl font-black uppercase leading-none tracking-tight md:text-8xl">
+          Find Food<br />
+          <span class="bg-yellow-300 px-2 border-4 border-black">At Your</span><br />
+          Poly
+        </h1>
+        <p class="mb-10 max-w-xl text-xl font-bold">
+          Browse canteens and stores across all Singapore polytechnics. See what's on the menu before you go.
+        </p>
+        <a
+          href="/polytechnics"
+          class="inline-block border-4 border-black bg-red-400 px-8 py-4 text-lg font-black uppercase tracking-wide text-black shadow-[6px_6px_0px_0px_#000] transition-all duration-100 hover:-translate-y-0.5 hover:shadow-[8px_8px_0px_0px_#000] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none"
+        >
+          Browse Polytechnics →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-b-4 border-black bg-black py-16">
+    <div class="mx-auto max-w-7xl px-4">
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+        {[
+          { poly: "SP", name: "Singapore Polytechnic", href: "/polytechnics/sp" },
+          { poly: "NP", name: "Ngee Ann Polytechnic", href: "/polytechnics/np" },
+          { poly: "TP", name: "Temasek Polytechnic", href: "/polytechnics/tp" },
+          { poly: "NYP", name: "Nanyang Polytechnic", href: "/polytechnics/nyp" },
+          { poly: "RP", name: "Republic Polytechnic", href: "/polytechnics/rp" },
+        ].map((p) => (
+          <a
+            href={p.href}
+            class="group border-4 border-yellow-300 bg-black p-6 shadow-[6px_6px_0px_0px_#FFD93D] transition-all duration-200 hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_#FFD93D]"
+          >
+            <div class="mb-2 text-5xl font-black text-yellow-300">{p.poly}</div>
+            <div class="font-bold uppercase tracking-wide text-white">{p.name}</div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Top Favorites Section -->
+  <section class="border-b-4 border-black bg-[#FFFDF5] py-24">
+    <div class="mx-auto max-w-7xl px-4">
+      <div class="mb-12 flex items-end justify-between">
+        <div>
+          <div class="mb-2 inline-block -rotate-1 border-4 border-black bg-red-400 px-3 py-1 text-xs font-black uppercase tracking-widest shadow-[3px_3px_0px_0px_#000]">
+            Most Popular
+          </div>
+          <h2 class="text-5xl font-black uppercase leading-none md:text-6xl">
+            Top <span class="bg-yellow-300 px-2 border-4 border-black">Favorites</span>
+          </h2>
+        </div>
+        <a href="/polytechnics" class="hidden md:inline-block border-4 border-black bg-white px-6 py-3 font-black uppercase tracking-wide shadow-[4px_4px_0px_0px_#000] transition-all duration-100 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_#000]">
+          View All →
+        </a>
+      </div>
+
+      {topFavorites.length > 0 ? (
+        <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
+          {topFavorites.map((product) => (
+            <a href={`/stores/${product.store?.slug}`} class="group border-4 border-black bg-white shadow-[6px_6px_0px_0px_#000] transition-all duration-200 hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_#000]">
+              {product.image?.asset?.url ? (
+                <img
+                  src={product.image.asset.url}
+                  alt={product.name}
+                  class="aspect-square w-full border-b-4 border-black object-cover"
+                />
+              ) : (
+                <div class="flex aspect-square items-center justify-center border-b-4 border-black bg-gradient-to-br from-yellow-200 to-red-200 text-7xl">
+                  🍽️
+                </div>
+              )}
+              <div class="p-4">
+                <div class="mb-2 flex items-start justify-between gap-2">
+                  <h3 class="text-sm font-black uppercase leading-tight">{product.name}</h3>
+                  <span class="shrink-0 border-2 border-black bg-yellow-300 px-2 py-0.5 text-sm font-black shadow-[2px_2px_0px_0px_#000]">
+                    ${product.price.toFixed(2)}
+                  </span>
+                </div>
+                <p class="mb-2 text-xs font-bold text-black/60">{product.store?.name}</p>
+                <div class="flex flex-wrap gap-1">
+                  <span class="border-2 border-black bg-purple-200 px-2 py-0.5 text-[10px] font-black uppercase">
+                    {product.store?.canteen?.polytechnic?.shortName}
+                  </span>
+                  {product.category && (
+                    <span class="border-2 border-black bg-red-200 px-2 py-0.5 text-[10px] font-black uppercase">
+                      {product.category}
+                    </span>
+                  )}
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+      ) : (
+        <div class="border-4 border-black bg-white p-16 text-center shadow-[8px_8px_0px_0px_#000]">
+          <p class="text-2xl font-black uppercase">No products yet.</p>
+          <p class="mt-2 font-bold text-black/60">Add food products in the Sanity Studio.</p>
+        </div>
+      )}
+
+      <a href="/polytechnics" class="mt-8 block md:hidden border-4 border-black bg-white px-6 py-4 text-center font-black uppercase tracking-wide shadow-[4px_4px_0px_0px_#000]">
+        View All Products →
+      </a>
+    </div>
+  </section>
+
+  <!-- By Polytechnic Sections -->
+  {polytechnics.map((poly) => {
+    const products = productsByPoly[poly.slug]?.slice(0, 4) || [];
+    if (products.length === 0) return null;
+    
+    return (
+      <section class="border-b-4 border-black bg-white py-20">
+        <div class="mx-auto max-w-7xl px-4">
+          <div class="mb-10 flex items-end justify-between">
+            <div>
+              <div class="mb-2 inline-block rotate-1 border-4 border-black bg-yellow-300 px-3 py-1 text-xs font-black uppercase tracking-widest shadow-[3px_3px_0px_0px_#000]">
+                {poly.shortName}
+              </div>
+              <h2 class="text-4xl font-black uppercase leading-none md:text-5xl">
+                {poly.name}
+              </h2>
+            </div>
+            <a href={`/polytechnics/${poly.slug}`} class="hidden md:inline-block border-4 border-black bg-red-400 px-6 py-3 font-black uppercase tracking-wide shadow-[4px_4px_0px_0px_#000] transition-all duration-100 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_#000]">
+              View All →
+            </a>
+          </div>
+
+          <div class="grid grid-cols-2 gap-6 md:grid-cols-4">
+            {products.map((product) => (
+              <a href={`/stores/${product.store?.slug}`} class="group border-4 border-black bg-white shadow-[6px_6px_0px_0px_#000] transition-all duration-200 hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_#000]">
+                {product.image?.asset?.url ? (
+                  <img
+                    src={product.image.asset.url}
+                    alt={product.name}
+                    class="aspect-square w-full border-b-4 border-black object-cover"
+                  />
+                ) : (
+                  <div class="flex aspect-square items-center justify-center border-b-4 border-black bg-gradient-to-br from-purple-200 to-yellow-200 text-8xl">
+                    🍽️
+                  </div>
+                )}
+                <div class="p-4">
+                  <div class="mb-2 flex items-start justify-between gap-2">
+                    <h3 class="text-base font-black uppercase leading-tight">{product.name}</h3>
+                    <span class="shrink-0 border-2 border-black bg-yellow-300 px-2 py-1 text-sm font-black shadow-[2px_2px_0px_0px_#000]">
+                      ${product.price.toFixed(2)}
+                    </span>
+                  </div>
+                  <p class="mb-3 text-xs font-bold text-black/60">{product.store?.name}</p>
+                  <div class="flex flex-wrap gap-1">
+                    <span class="inline-block border-2 border-black bg-red-400 px-2 py-1 text-[10px] font-black uppercase shadow-[2px_2px_0px_0px_#000]">
+                      {product.store?.canteen?.name}
+                    </span>
+                    {product.category && (
+                      <span class="inline-block border-2 border-black bg-purple-200 px-2 py-1 text-[10px] font-black uppercase shadow-[2px_2px_0px_0px_#000]">
+                        {product.category}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </a>
+            ))}
+          </div>
+
+          <a href={`/polytechnics/${poly.slug}`} class="mt-8 block md:hidden border-4 border-black bg-red-400 px-6 py-4 text-center font-black uppercase tracking-wide shadow-[4px_4px_0px_0px_#000]">
+            View All from {poly.shortName} →
+          </a>
+        </div>
+      </section>
+    );
+  })}
+
+  <section class="py-24">
+    <div class="mx-auto max-w-7xl px-4">
+      <h2 class="mb-12 text-5xl font-black uppercase md:text-6xl">How It Works</h2>
+      <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
+        {[
+          { num: "01", title: "Pick Your Poly", desc: "Choose from any of the 5 Singapore polytechnics." },
+          { num: "02", title: "Browse Canteens", desc: "Explore all the canteens in your polytechnic campus." },
+          { num: "03", title: "See the Menu", desc: "Check out stores and their full menus with prices." },
+        ].map((step) => (
+          <div class="border-4 border-black bg-white p-8 shadow-[8px_8px_0px_0px_#000]">
+            <div class="mb-4 text-6xl font-black text-red-400">{step.num}</div>
+            <h3 class="mb-2 text-2xl font-black uppercase">{step.title}</h3>
+            <p class="font-bold text-black/70">{step.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

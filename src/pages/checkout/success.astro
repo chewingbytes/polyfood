@@ -1,0 +1,27 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Order Confirmed — Food at Poly">
+  <div style="min-height:60vh; display:flex; align-items:center; justify-content:center; padding:2rem;">
+    <div style="text-align:center; max-width:480px;">
+      <div style="font-size:5rem; margin-bottom:1rem;">✅</div>
+      <h1 style="font-size:2.5rem; font-weight:900; margin-bottom:1rem;">Payment Confirmed!</h1>
+      <p style="font-size:1.125rem; color:#555; margin-bottom:2rem;">
+        Your order has been sent to the store. You'll be able to collect it at the time you selected.
+      </p>
+      <a
+        href="/"
+        style="display:inline-block; background:#FF6B6B; color:#000; font-weight:900; font-size:1.125rem; padding:1rem 2rem; border:3px solid #000; box-shadow:4px 4px 0 #000; text-decoration:none;"
+      >
+        Back to Home
+      </a>
+    </div>
+  </div>
+
+  <script>
+    // Clear cart after successful payment
+    localStorage.removeItem("fap-cart");
+    localStorage.removeItem("fap-collection");
+  </script>
+</BaseLayout>
