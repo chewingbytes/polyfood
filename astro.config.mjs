@@ -14,6 +14,8 @@ import netlify from "@astrojs/netlify";
 import sanity from "@sanity/astro";
 import tailwindcss from "@tailwindcss/vite";
 
+import vercel from "@astrojs/vercel";
+
 // Sanity configuration validation
 if (!PUBLIC_SANITY_STUDIO_PROJECT_ID) {
   console.warn(
@@ -30,7 +32,7 @@ if (!PUBLIC_SANITY_STUDIO_DATASET) {
 // https://astro.build/config
 export default defineConfig({
   output: "server",
-  adapter: netlify(),
+  adapter: vercel(),
   integrations: [
     svelte(),
     react(),
