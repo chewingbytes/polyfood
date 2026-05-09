@@ -15,7 +15,7 @@ const spicyLabels = ["Not Spicy", "Mild", "Medium", "Hot", "Extra Hot"];
 ---
 
 <BaseLayout title={`${store.name} — Food at Poly`}>
-  <div class="mx-auto max-w-7xl px-4 py-16">
+  <div class="mx-auto container px-4 py-16">
     <!-- Breadcrumb -->
     <nav class="mb-10 flex flex-wrap items-center gap-2 text-sm font-bold uppercase tracking-wide">
       <a href="/polytechnics" class="hover:underline">Polytechnics</a>
@@ -38,40 +38,6 @@ const spicyLabels = ["Not Spicy", "Mild", "Medium", "Hot", "Extra Hot"];
       <span>›</span>
       <span class="text-black/50">{store.name}</span>
     </nav>
-
-    <!-- Store Header -->
-    <div class="mb-16 border-4 border-black bg-white shadow-[8px_8px_0px_0px_#000]">
-      {store.image?.asset?.url && (
-        <img
-          src={store.image.asset.url}
-          alt={store.name}
-          class="h-64 w-full border-b-4 border-black object-cover"
-        />
-      )}
-      <div class="p-8">
-        <h1 class="mb-2 text-5xl font-black uppercase leading-none md:text-7xl">{store.name}</h1>
-        {store.description && (
-          <p class="mb-6 max-w-2xl text-lg font-bold text-black/60">{store.description}</p>
-        )}
-        <div class="flex flex-wrap gap-4">
-          {store.cuisine && (
-            <div class="border-4 border-black bg-red-400 px-4 py-2 text-sm font-black shadow-[3px_3px_0px_0px_#000]">
-              🍽️ {store.cuisine}
-            </div>
-          )}
-          {store.stallNumber && (
-            <div class="border-4 border-black bg-yellow-300 px-4 py-2 text-sm font-black shadow-[3px_3px_0px_0px_#000]">
-              📍 Stall {store.stallNumber}
-            </div>
-          )}
-          {store.contactNumber && (
-            <div class="border-4 border-black bg-purple-300 px-4 py-2 text-sm font-black shadow-[3px_3px_0px_0px_#000]">
-              📞 {store.contactNumber}
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
 
     <!-- Menu -->
     <h2 class="mb-8 text-4xl font-black uppercase md:text-5xl">Menu</h2>

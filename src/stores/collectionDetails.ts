@@ -1,4 +1,5 @@
 import { persistentAtom } from "@nanostores/persistent";
+import { atom } from "nanostores";
 
 export type CollectionTime = "asap" | "30m" | "1h" | "2h";
 
@@ -26,6 +27,9 @@ export const collectionTimeLabels: Record<CollectionTime, string> = {
   "2h": "In ~2 Hours",
 };
 
+export const detailsConfirmed = atom<boolean>(false);
+
 export function saveCollectionDetails(details: CollectionDetails) {
   collectionDetails.set(details);
+  detailsConfirmed.set(true);
 }

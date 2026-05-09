@@ -31,7 +31,7 @@ body {
   display: flex;
   min-height: 100vh;
   flex-direction: column;
-  background-color: white;
+  background-color: "#FAF9F6";
   color: var(--color-neo-ink);
   font-weight: 700;
 }

@@ -13,11 +13,11 @@
     <span class="sr-only">Open your cart</span>
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      fill="none"
+      fill="white"
       viewBox="0 0 24 24"
-      stroke-width="1.5"
+      stroke-width="2"
       stroke="currentColor"
-      class="w-7 h-7 sm:w-8 sm:h-8 pointer-events-none"
+      class="w-7 h-7 sm:w-10 sm:h-10 pointer-events-none"
     >
       <path
         stroke-linecap="round"

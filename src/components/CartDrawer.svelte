@@ -98,7 +98,7 @@
 
   <!-- Drawer -->
   <div
-    class="fixed inset-0 z-50 overflow-hidden"
+    class="fixed inset-0 z-99 overflow-hidden"
     role="dialog"
     aria-modal="true"
     aria-labelledby="cart-title"

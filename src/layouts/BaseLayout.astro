@@ -14,7 +14,10 @@ const { title, description = "Order food from your polytechnic canteen." } = Ast
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -30,26 +33,176 @@ const { title, description = "Order food from your polytechnic canteen." } = Ast
     </style>
   </head>
   <body>
-    <header class="border-b-4 border-black bg-yellow-300">
+    <header class="sticky top-0 z-[99] border-b-4 border-black bg-[#F9D404]">
+      <!-- Main bar -->
       <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
-        <a href="/" class="border-4 border-black bg-black px-4 py-2 text-xl font-black uppercase tracking-tight text-yellow-300 shadow-[4px_4px_0px_0px_#FFD93D] transition-all duration-100 hover:shadow-[6px_6px_0px_0px_#FFD93D]">
-          Food at Poly
+        <a href="/" class="block">
+          <img src="/logo.png" alt="Food at Poly" class="h-12 w-auto rounded-md" />
         </a>
-        <nav class="flex gap-2 items-center">
+
+        <!-- Desktop nav -->
+        <nav class="hidden md:flex items-center gap-5">
           <a href="/polytechnics" class="border-4 border-black bg-white px-4 py-2 text-sm font-bold uppercase tracking-wide shadow-[4px_4px_0px_0px_#000] transition-all duration-100 hover:-translate-y-0.5 hover:bg-red-400 hover:shadow-[6px_6px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none">
             Polytechnics
           </a>
           <AuthButton client:load />
           <CartIcon client:load />
         </nav>
+
+        <!-- Mobile hamburger button -->
+        <button
+          id="hamburger-btn"
+          aria-label="Open menu"
+          aria-expanded="false"
+          class="md:hidden flex h-10 w-10 items-center justify-center border-4 border-black bg-black text-yellow-300 shadow-[3px_3px_0_#FFD93D] transition-all duration-100 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
+        >
+          <!-- Hamburger icon -->
+          <svg id="icon-hamburger" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="h-5 w-5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          </svg>
+          <!-- Close icon -->
+          <svg id="icon-close" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="h-5 w-5 hidden">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Desktop poly sub-bar -->
+      <div class="hidden md:block border-t-4 border-black bg-black">
+        <div class="mx-auto max-w-7xl px-4">
+          <div class="flex items-stretch">
+            {[
+              { poly: "SP", name: "Singapore Polytechnic", href: "/polytechnics/sp" },
+              { poly: "NP", name: "Ngee Ann Polytechnic", href: "/polytechnics/np" },
+              { poly: "TP", name: "Temasek Polytechnic", href: "/polytechnics/tp" },
+              { poly: "NYP", name: "Nanyang Polytechnic", href: "/polytechnics/nyp" },
+              { poly: "RP", name: "Republic Polytechnic", href: "/polytechnics/rp" },
+            ].map((p) => (
+              <a
+                href={p.href}
+                class="group flex flex-1 flex-col items-center justify-center gap-0.5 border-r-4 border-black px-4 py-3 transition-colors duration-150 last:border-r-0 hover:bg-yellow-300"
+              >
+                <span class="text-xl font-black text-yellow-300 group-hover:text-black">{p.poly}</span>
+                <span class="hidden text-[10px] font-bold uppercase tracking-wide text-white/60 group-hover:text-black/60 lg:block">{p.name}</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile dropdown menu -->
+      <div
+        id="mobile-menu"
+        class="md:hidden overflow-hidden border-t-4 border-black bg-black"
+        style="max-height: 0; transition: max-height 0.3s ease-in-out;"
+      >
+        <!-- Cart + Auth row -->
+        <div class="flex items-center gap-4 border-b-4 border-white/20 px-5 py-4">
+          <span class="text-xs font-black uppercase tracking-widest text-white/50">Quick links</span>
+          <div class="ml-auto flex items-center gap-3">
+            <CartIcon client:load />
+            <AuthButton client:load />
+          </div>
+        </div>
+        <!-- Poly grid -->
+        <div class="grid grid-cols-5">
+          {[
+            { poly: "SP", name: "Singapore Polytechnic", href: "/polytechnics/sp" },
+            { poly: "NP", name: "Ngee Ann Polytechnic", href: "/polytechnics/np" },
+            { poly: "TP", name: "Temasek Polytechnic", href: "/polytechnics/tp" },
+            { poly: "NYP", name: "Nanyang Polytechnic", href: "/polytechnics/nyp" },
+            { poly: "RP", name: "Republic Polytechnic", href: "/polytechnics/rp" },
+          ].map((p) => (
+            <a
+              href={p.href}
+              class="group flex flex-col items-center justify-center gap-1 border-r-4 border-white/10 px-2 py-5 transition-colors duration-150 last:border-r-0 hover:bg-yellow-300"
+            >
+              <span class="text-lg font-black text-yellow-300 group-hover:text-black">{p.poly}</span>
+              <span class="text-center text-[8px] font-bold uppercase leading-tight tracking-wide text-white/40 group-hover:text-black/60">{p.name}</span>
+            </a>
+          ))}
+        </div>
       </div>
     </header>
+
     <CartDrawer client:load />
     <main class="flex-1">
       <slot />
     </main>
-    <footer class="mt-auto border-t-4 border-black bg-black py-8 text-center">
-      <p class="font-bold uppercase tracking-widest text-yellow-300">Food at Poly &mdash; Singapore</p>
-    </footer>
+      <footer class="bg-black text-white py-16 px-4">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid md:grid-cols-4 gap-12 mb-12">
+        <div class="md:col-span-2">
+          <div class="flex items-center gap-3 mb-4">
+            <img
+              src="/logo.png"
+              alt="Food at Poly"
+              class="h-12 w-auto rounded-md"
+            />
+          </div>
+          <p class="text-lg font-bold text-white/70 max-w-md mb-6">
+            Browse canteen menus and order food from any of Singapore's 5 polytechnics — all in one place.
+          </p>
+          <div class="flex gap-2 flex-wrap">
+            <span class="bg-yellow-300 border-2 border-white/20 text-black px-2 py-1 font-black text-xs uppercase">🇸🇬 Singapore</span>
+            <span class="border-2 border-white/20 px-2 py-1 font-black text-xs uppercase text-white">5 Polytechnics</span>
+            <span class="border-2 border-white/20 px-2 py-1 font-black text-xs uppercase text-white">Beta 2026</span>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="text-lg font-black uppercase mb-4 text-yellow-300">Browse</h3>
+          <ul class="space-y-2 text-white/70 font-bold">
+            <li><a href="/polytechnics/sp" class="hover:text-yellow-300 transition-colors">Singapore Polytechnic</a></li>
+            <li><a href="/polytechnics/np" class="hover:text-yellow-300 transition-colors">Ngee Ann Polytechnic</a></li>
+            <li><a href="/polytechnics/tp" class="hover:text-yellow-300 transition-colors">Temasek Polytechnic</a></li>
+            <li><a href="/polytechnics/nyp" class="hover:text-yellow-300 transition-colors">Nanyang Polytechnic</a></li>
+            <li><a href="/polytechnics/rp" class="hover:text-yellow-300 transition-colors">Republic Polytechnic</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="text-lg font-black uppercase mb-4 text-yellow-300">Account</h3>
+          <ul class="space-y-2 text-white/70 font-bold">
+            <li><a href="/auth/login" class="hover:text-yellow-300 transition-colors">Login</a></li>
+            <li><a href="/auth/signup" class="hover:text-yellow-300 transition-colors">Sign Up</a></li>
+            <li><a href="/settings" class="hover:text-yellow-300 transition-colors">Settings</a></li>
+            <li><a href="mailto:bryanchewzy24@gmail.com" class="hover:text-yellow-300 transition-colors">Contact Support</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="border-t-4 border-white/20 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+        <p class="font-bold text-white/40 text-sm">© 2026 Food at Poly. All rights reserved.</p>
+        <p class="font-bold text-white/40 text-sm">Made with 💛 for Singapore poly students</p>
+      </div>
+    </div>
+  </footer>
+
+    <script is:inline>
+      const btn = document.getElementById("hamburger-btn");
+      const menu = document.getElementById("mobile-menu");
+      const iconHamburger = document.getElementById("icon-hamburger");
+      const iconClose = document.getElementById("icon-close");
+      let open = false;
+
+      btn.addEventListener("click", () => {
+        open = !open;
+        menu.style.maxHeight = open ? (menu.scrollHeight + "px") : "0";
+        btn.setAttribute("aria-expanded", String(open));
+        iconHamburger.classList.toggle("hidden", open);
+        iconClose.classList.toggle("hidden", !open);
+      });
+
+      menu.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          open = false;
+          menu.style.maxHeight = "0";
+          btn.setAttribute("aria-expanded", "false");
+          iconHamburger.classList.remove("hidden");
+          iconClose.classList.add("hidden");
+        });
+      });
+    </script>
   </body>
 </html>

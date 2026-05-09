@@ -17,52 +17,20 @@ if (!polytechnic) {
 
 <BaseLayout title={`${polytechnic.name} - Food at Poly`}>
   <div class="container mx-auto px-4 py-16">
-    <nav class="mb-8">
-      <a href="/polytechnics" class="btn btn-secondary text-sm">
-        ← Back to Polytechnics
-      </a>
+        <nav class="mb-10 flex flex-wrap items-center gap-2 text-sm font-bold uppercase tracking-wide">
+      <a href="/polytechnics" class="hover:underline">Polytechnics</a>
+      {polytechnic && (
+        <>
+          <span>›</span>
+          <a href={`/polytechnics/${polytechnic.slug}`} class="hover:underline">
+            {polytechnic.shortName}
+          </a>
+        </>
+      )}
     </nav>
 
-    <div class="mb-16 border-4 border-neo-ink bg-white p-8 shadow-neo-lg">
-      <div class="grid grid-cols-1 items-center gap-8 md:grid-cols-3">
-        <div class="md:col-span-2">
-          <h1 class="mb-2 text-6xl md:text-8xl">{polytechnic.name}</h1>
-          <p class="mb-4 text-3xl text-neo-accent">{polytechnic.shortName}</p>
-          
-          {polytechnic.description && (
-            <p class="mb-4 max-w-2xl text-lg">{polytechnic.description}</p>
-          )}
-          
-          <div class="mt-6 flex flex-wrap items-center gap-4">
-            {polytechnic.address && (
-              <p class="text-md">📍 {polytechnic.address}</p>
-            )}
-            {polytechnic.website && (
-              <a 
-                href={polytechnic.website} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                class="btn btn-primary"
-              >
-                Visit Website →
-              </a>
-            )}
-          </div>
-        </div>
-        {polytechnic.logo && (
-          <div class="hidden md:block">
-            <img 
-              src={polytechnic.logo.asset?.url} 
-              alt={`${polytechnic.name} Logo`}
-              class="h-48 w-48 object-contain"
-            />
-          </div>
-        )}
-      </div>
-    </div>
-
     <div>
-      <h2 class="mb-8 text-5xl">Canteens</h2>
+      <h2 class="mb-8 text-5xl">{polytechnic.name} Canteens</h2>
       
       {polytechnic.canteens && polytechnic.canteens.length > 0 ? (
         <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">

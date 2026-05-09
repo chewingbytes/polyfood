@@ -1,6 +1,7 @@
 ---
 import Logo from "./Logo.astro";
 import CartIcon from "./CartIcon.svelte";
+import AuthButton from "./AuthButton.svelte";
 ---
 
 <header class="sticky top-0 z-40">
@@ -13,8 +14,9 @@ import CartIcon from "./CartIcon.svelte";
       >
         <a href="/">Food at Poly</a>
       </h1>
-      <div class="justify-self-end">
+      <div class="flex items-center justify-end gap-3">
         <CartIcon client:load />
+        <AuthButton client:load />
       </div>
     </nav>
   </div>

@@ -9,45 +9,36 @@
   onMount(async () => {
     const { data } = await supabaseBrowser.auth.getSession();
     user = data.session?.user ?? null;
+
+    console.log("DATA from authbutton:", data)
     ready = true;
 
     supabaseBrowser.auth.onAuthStateChange((_e, session) => {
       user = session?.user ?? null;
     });
   });
-
-  async function logout() {
-    await supabaseBrowser.auth.signOut();
-    window.location.reload();
-  }
-
-  $: displayName = user?.user_metadata?.full_name
-    ? (user.user_metadata.full_name as string).split(" ")[0]
-    : user?.email?.split("@")[0] ?? "";
 </script>
 
 {#if !ready}
-  <!-- skeleton so layout doesn't shift -->
-  <div style="width:80px; height:38px; border:4px solid #000; background:#eee;"></div>
+  <div class="h-9 w-9 border-4 border-black bg-gray-200"></div>
 {:else if user}
-  <div style="display:flex; align-items:center; gap:0.5rem;">
-    <span
-      style="border:4px solid #000; background:#C4B5FD; padding:0.3rem 0.75rem; font-size:0.75rem; font-weight:900; text-transform:uppercase; letter-spacing:0.06em; box-shadow:3px 3px 0 #000;"
-    >
-      {displayName}
-    </span>
-    <button
-      on:click={logout}
-      style="border:4px solid #000; background:#fff; padding:0.3rem 0.75rem; font-size:0.75rem; font-family:inherit; font-weight:900; text-transform:uppercase; letter-spacing:0.06em; cursor:pointer; box-shadow:3px 3px 0 #000;"
-    >
-      Logout
-    </button>
-  </div>
+  <a
+    href="/settings"
+    aria-label="Profile settings"
+    class="flex h-9 w-9 items-center justify-center border-4 border-black bg-[#C4B5FD] shadow-[3px_3px_0_#000] transition-all duration-100 hover:shadow-[5px_5px_0_#000] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5">
+      <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clip-rule="evenodd" />
+    </svg>
+  </a>
 {:else}
   <a
     href="/auth/login"
-    style="display:inline-block; border:4px solid #000; background:#fff; padding:0.3rem 0.875rem; font-size:0.75rem; font-weight:900; text-transform:uppercase; letter-spacing:0.06em; text-decoration:none; color:#000; box-shadow:3px 3px 0 #000;"
+    class="flex h-9 w-9 items-center justify-center border-4 border-black bg-white shadow-[3px_3px_0_#000] transition-all duration-100 hover:shadow-[5px_5px_0_#000] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none"
+    aria-label="Login"
   >
-    Login
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5">
+      <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clip-rule="evenodd" />
+    </svg>
   </a>
 {/if}

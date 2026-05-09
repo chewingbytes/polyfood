@@ -41,49 +41,6 @@ const polytechnics = [
       style="background-image: linear-gradient(rgba(0,0,0,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.06) 1px, transparent 1px); background-size: 40px 40px;"
     >
     </div>
-    <div class="mx-auto max-w-7xl px-4 py-24 md:py-36">
-      <div class="max-w-3xl">
-        <div class="mb-6 inline-block -rotate-1 border-4 border-black bg-red-400 px-4 py-1 text-sm font-black uppercase tracking-widest text-black shadow-[4px_4px_0px_0px_#000]">
-          Singapore Polytechnics
-        </div>
-        <h1 class="mb-6 text-6xl font-black uppercase leading-none tracking-tight md:text-8xl">
-          Find Food<br />
-          <span class="bg-yellow-300 px-2 border-4 border-black">At Your</span><br />
-          Poly
-        </h1>
-        <p class="mb-10 max-w-xl text-xl font-bold">
-          Browse canteens and stores across all Singapore polytechnics. See what's on the menu before you go.
-        </p>
-        <a
-          href="/polytechnics"
-          class="inline-block border-4 border-black bg-red-400 px-8 py-4 text-lg font-black uppercase tracking-wide text-black shadow-[6px_6px_0px_0px_#000] transition-all duration-100 hover:-translate-y-0.5 hover:shadow-[8px_8px_0px_0px_#000] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none"
-        >
-          Browse Polytechnics →
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <section class="border-b-4 border-black bg-black py-16">
-    <div class="mx-auto max-w-7xl px-4">
-      <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
-        {[
-          { poly: "SP", name: "Singapore Polytechnic", href: "/polytechnics/sp" },
-          { poly: "NP", name: "Ngee Ann Polytechnic", href: "/polytechnics/np" },
-          { poly: "TP", name: "Temasek Polytechnic", href: "/polytechnics/tp" },
-          { poly: "NYP", name: "Nanyang Polytechnic", href: "/polytechnics/nyp" },
-          { poly: "RP", name: "Republic Polytechnic", href: "/polytechnics/rp" },
-        ].map((p) => (
-          <a
-            href={p.href}
-            class="group border-4 border-yellow-300 bg-black p-6 shadow-[6px_6px_0px_0px_#FFD93D] transition-all duration-200 hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_#FFD93D]"
-          >
-            <div class="mb-2 text-5xl font-black text-yellow-300">{p.poly}</div>
-            <div class="font-bold uppercase tracking-wide text-white">{p.name}</div>
-          </a>
-        ))}
-      </div>
-    </div>
   </section>
 
   <!-- Top Favorites Section -->
@@ -106,7 +63,7 @@ const polytechnics = [
       {topFavorites.length > 0 ? (
         <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
           {topFavorites.map((product) => (
-            <a href={`/stores/${product.store?.slug}`} class="group border-4 border-black bg-white shadow-[6px_6px_0px_0px_#000] transition-all duration-200 hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_#000]">
+            <a href={`/stores/${product.store?.slug}`} class="group border-4 border-black bg-white shadow-[6px_6px_0px_0px_#000] transition-all duration-200 hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_#000] z-30">
               {product.image?.asset?.url ? (
                 <img
                   src={product.image.asset.url}
