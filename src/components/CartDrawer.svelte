@@ -92,21 +92,21 @@
   <div
     in:fade={{ duration: 300 }}
     out:fade={{ duration: 300 }}
-    class="fixed inset-0 z-40 bg-slate-400/50 backdrop-blur-sm"
+    style="position: fixed; inset: 0; z-index: 40; background: rgba(45,45,45,0.4); backdrop-filter: blur(2px);"
     aria-hidden="true"
   ></div>
 
   <!-- Drawer -->
   <div
-    class="fixed inset-0 z-99 overflow-hidden"
+    style="position: fixed; inset: 0; z-index: 99; overflow: hidden;"
     role="dialog"
     aria-modal="true"
     aria-labelledby="cart-title"
   >
-    <div class="absolute inset-0 overflow-hidden">
+    <div style="position: absolute; inset: 0; overflow: hidden;">
       <div
         role="document"
-        class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-6 focus:outline-none"
+        style="pointer-events: none; position: fixed; inset-y: 0; right: 0; display: flex; max-width: 100%; padding-left: 1.5rem;"
         tabindex="-1"
         use:clickOutside={() => closeDrawer()}
         bind:this={drawerEl}
@@ -115,88 +115,90 @@
         <div
           in:fly={{ duration: 400, x: 500, opacity: 1 }}
           out:fly={{ duration: 300, x: 500, opacity: 1 }}
-          class="pointer-events-auto w-screen max-w-lg bg-white flex flex-col max-h-screen"
+          style="pointer-events: auto; width: 100vw; max-width: 30rem; background: #fdfbf7; display: flex; flex-direction: column; height: 100vh; border-left: 3px solid #2d2d2d; box-shadow: -6px 0 0 #2d2d2d;"
         >
           <!-- Header -->
-          <div class="flex items-center justify-between border-b px-5 py-4 shadow-sm flex-shrink-0">
-            <h2 id="cart-title" class="text-2xl font-bold text-zinc-800">
+          <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #e5e0d8; padding: 1.25rem 1.5rem; flex-shrink: 0; background: #fff9c4;">
+            <h2 id="cart-title" style="font-family: 'Kalam', cursive; font-size: 1.4rem; color: #2d2d2d;">
               Your Cart
               {#if cartTotalQuantity($cart) > 0}
-                <span class="ml-2 text-sm font-medium text-zinc-500">
+                <span style="font-family: 'Patrick Hand', cursive; font-size: 0.85rem; color: #2d2d2d; opacity: 0.55; margin-left: 0.4rem;">
                   ({cartTotalQuantity($cart)} item{cartTotalQuantity($cart) !== 1 ? "s" : ""})
                 </span>
               {/if}
             </h2>
             <button
               onclick={() => closeDrawer()}
-              class="-m-2 p-2 text-zinc-400 hover:text-zinc-600"
+              style="padding: 0.4rem; color: #2d2d2d; opacity: 0.5; background: none; border: none; cursor: pointer; transition: opacity 120ms;"
               aria-label="Close cart"
+              onmouseover={(e) => { (e.currentTarget as HTMLElement).style.opacity = '1'; }}
+              onmouseout={(e) => { (e.currentTarget as HTMLElement).style.opacity = '0.5'; }}
             >
-              <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <svg style="width: 1.4rem; height: 1.4rem;" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
           </div>
 
           <!-- Body -->
-          <div class="flex-1 overflow-y-auto px-5 py-4">
+          <div style="flex: 1; overflow-y: auto; padding: 1.25rem 1.5rem;">
             {#if $cart.length === 0}
-              <div class="flex flex-col items-center justify-center h-full py-16 text-center">
-                <svg class="w-16 h-16 text-zinc-200 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                </svg>
-                <p class="text-zinc-400 font-medium">Your cart is empty</p>
+              <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 12rem; text-align: center;">
+                <div style="font-size: 3.5rem; margin-bottom: 0.75rem;">🛒</div>
+                <p style="font-family: 'Kalam', cursive; font-size: 1.1rem; color: #2d2d2d; opacity: 0.5;">Your cart is empty</p>
               </div>
             {:else}
               <!-- Store name -->
-              <p class="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-3">
+              <p style="font-family: 'Kalam', cursive; font-size: 0.8rem; color: #2d2d2d; opacity: 0.5; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">
                 {$cart[0].storeName}
               </p>
 
               <!-- Items list -->
-              <ul class="divide-y divide-zinc-100 mb-6">
+              <ul style="margin-bottom: 1.25rem;">
                 {#each $cart as item (item.id)}
-                  <li class="py-4 flex items-center gap-3">
-                    <div class="flex-1 min-w-0">
-                      <p class="font-semibold text-zinc-800 truncate">{item.name}</p>
-                      <p class="text-sm text-zinc-500">{formatSGD(item.priceInCents)} each</p>
+                  <li style="padding: 0.85rem 0; display: flex; align-items: center; gap: 0.75rem; border-bottom: 1px dashed #e5e0d8;">
+                    <div style="flex: 1; min-width: 0;">
+                      <p style="font-family: 'Kalam', cursive; font-size: 0.95rem; color: #2d2d2d; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{item.name}</p>
+                      <p style="font-family: 'Patrick Hand', cursive; font-size: 0.8rem; color: #2d2d2d; opacity: 0.55;">{formatSGD(item.priceInCents)} each</p>
                     </div>
 
                     <!-- Qty controls -->
-                    <div class="flex items-center gap-2">
+                    <div style="display: flex; align-items: center; gap: 0.4rem;">
                       <button
                         onclick={() => updateCartItemQty(item.id, item.qty - 1)}
-                        class="w-7 h-7 rounded border border-zinc-300 flex items-center justify-center text-zinc-600 hover:bg-zinc-50"
+                        style="width: 1.6rem; height: 1.6rem; border: 1.5px solid #2d2d2d; border-radius: 4px 6px 4px 6px / 6px 4px 6px 4px; display: flex; align-items: center; justify-content: center; background: white; cursor: pointer; box-shadow: 2px 2px 0 #2d2d2d;"
                         aria-label="Decrease quantity"
                       >
-                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
+                        <svg style="width: 0.7rem; height: 0.7rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M20 12H4" />
                         </svg>
                       </button>
-                      <span class="w-6 text-center text-sm font-semibold">{item.qty}</span>
+                      <span style="width: 1.5rem; text-align: center; font-family: 'Kalam', cursive; font-size: 0.9rem; color: #2d2d2d;">{item.qty}</span>
                       <button
                         onclick={() => updateCartItemQty(item.id, item.qty + 1)}
-                        class="w-7 h-7 rounded border border-zinc-300 flex items-center justify-center text-zinc-600 hover:bg-zinc-50"
+                        style="width: 1.6rem; height: 1.6rem; border: 1.5px solid #2d2d2d; border-radius: 4px 6px 4px 6px / 6px 4px 6px 4px; display: flex; align-items: center; justify-content: center; background: white; cursor: pointer; box-shadow: 2px 2px 0 #2d2d2d;"
                         aria-label="Increase quantity"
                       >
-                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        <svg style="width: 0.7rem; height: 0.7rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" />
                         </svg>
                       </button>
                     </div>
 
                     <!-- Line total -->
-                    <span class="text-sm font-bold text-zinc-800 w-14 text-right">
+                    <span style="font-family: 'Kalam', cursive; font-size: 0.9rem; color: #2d2d2d; width: 3.5rem; text-align: right; flex-shrink: 0;">
                       {formatSGD(item.priceInCents * item.qty)}
                     </span>
 
                     <!-- Remove -->
                     <button
                       onclick={() => removeCartItem(item.id)}
-                      class="text-zinc-300 hover:text-red-500 ml-1"
+                      style="color: #2d2d2d; opacity: 0.3; background: none; border: none; cursor: pointer; transition: opacity 120ms; margin-left: 0.25rem;"
                       aria-label="Remove {item.name}"
+                      onmouseover={(e) => { const el = e.currentTarget as HTMLElement; el.style.opacity = '1'; el.style.color = '#ff4d4d'; }}
+                      onmouseout={(e) => { const el = e.currentTarget as HTMLElement; el.style.opacity = '0.3'; el.style.color = '#2d2d2d'; }}
                     >
-                      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <svg style="width: 1rem; height: 1rem;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                       </svg>
                     </button>
@@ -207,31 +209,31 @@
               <!-- Clear cart -->
               <button
                 onclick={() => clearCart()}
-                class="text-xs text-zinc-400 hover:text-red-500 underline mb-6"
+                style="font-family: 'Patrick Hand', cursive; font-size: 0.8rem; color: #2d2d2d; opacity: 0.4; background: none; border: none; cursor: pointer; text-decoration: underline; text-decoration-style: wavy; margin-bottom: 1.25rem;"
               >
                 Clear cart
               </button>
 
               <!-- Collection details -->
-              <div class="border-t pt-5">
-                <h3 class="font-bold text-zinc-800 mb-4">Your details</h3>
+              <div style="border-top: 1px dashed #e5e0d8; padding-top: 1.25rem;">
+                <h3 style="font-family: 'Kalam', cursive; font-size: 1.1rem; color: #2d2d2d; margin-bottom: 1rem;">Your details</h3>
 
-                <label class="block mb-4">
-                  <span class="text-sm font-semibold text-zinc-700">Your name</span>
+                <label style="display: block; margin-bottom: 1rem;">
+                  <span style="display: block; font-family: 'Patrick Hand', cursive; font-size: 0.9rem; color: #2d2d2d; margin-bottom: 0.35rem;">Your name</span>
                   <input
                     type="text"
                     bind:value={studentName}
                     placeholder="e.g. Bryan"
-                    class="mt-1 block w-full rounded border border-zinc-300 px-3 py-2 text-sm focus:border-zinc-500 focus:outline-none"
+                    style="width: 100%; border: 2px solid #2d2d2d; border-radius: 8px 4px 10px 4px / 4px 10px 4px 8px; padding: 0.5rem 0.75rem; font-family: 'Patrick Hand', cursive; font-size: 0.95rem; background: white; color: #2d2d2d; outline: none; box-shadow: 2px 2px 0 #2d2d2d;"
                     autocomplete="given-name"
                   />
                 </label>
 
-                <label class="block mb-2">
-                  <span class="text-sm font-semibold text-zinc-700">Collection time</span>
+                <label style="display: block; margin-bottom: 0.5rem;">
+                  <span style="display: block; font-family: 'Patrick Hand', cursive; font-size: 0.9rem; color: #2d2d2d; margin-bottom: 0.35rem;">Collection time</span>
                   <select
                     bind:value={collectionTime}
-                    class="mt-1 block w-full rounded border border-zinc-300 px-3 py-2 text-sm focus:border-zinc-500 focus:outline-none bg-white"
+                    style="width: 100%; border: 2px solid #2d2d2d; border-radius: 8px 4px 10px 4px / 4px 10px 4px 8px; padding: 0.5rem 0.75rem; font-family: 'Patrick Hand', cursive; font-size: 0.95rem; background: white; color: #2d2d2d; outline: none; box-shadow: 2px 2px 0 #2d2d2d;"
                   >
                     {#each Object.entries(collectionTimeLabels) as [key, label]}
                       <option value={key}>{label}</option>
@@ -244,36 +246,38 @@
 
           <!-- Footer -->
           {#if $cart.length > 0}
-            <div class="border-t px-5 py-4 flex-shrink-0">
-              <div class="flex justify-between text-base font-bold text-zinc-800 mb-4">
-                <span>Total</span>
-                <span>{formatSGD(cartTotal($cart))}</span>
+            <div style="border-top: 2px solid #e5e0d8; padding: 1.25rem 1.5rem; flex-shrink: 0; background: #fdfbf7;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <span style="font-family: 'Kalam', cursive; font-size: 1.05rem; color: #2d2d2d;">Total</span>
+                <span style="font-family: 'Kalam', cursive; font-size: 1.2rem; color: #2d2d2d; padding: 2px 10px; background: #fff9c4; border: 2px solid #2d2d2d; border-radius: 4px 8px 4px 8px / 8px 4px 8px 4px; box-shadow: 2px 2px 0 #2d2d2d;">{formatSGD(cartTotal($cart))}</span>
               </div>
 
               {#if checkoutError}
-                <p class="text-sm text-red-600 mb-3">{checkoutError}</p>
+                <p style="font-family: 'Patrick Hand', cursive; font-size: 0.9rem; color: #ff4d4d; margin-bottom: 0.75rem;">{checkoutError}</p>
               {/if}
 
               <button
                 onclick={handleCheckout}
                 disabled={checking}
-                class="w-full rounded bg-[#635BFF] text-white font-bold py-3 px-4 flex items-center justify-center gap-2 hover:bg-[#4f47cc] disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
+                style="width: 100%; border: 2px solid #2d2d2d; border-radius: 50px 40px 50px 40px / 40px 50px 40px 50px; padding: 0.75rem 1.5rem; font-family: 'Kalam', cursive; font-size: 1.05rem; font-weight: 700; background: #ff4d4d; color: white; box-shadow: 4px 4px 0 #2d2d2d; transition: all 120ms ease; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem;"
+                onmouseover={(e) => { const el = e.currentTarget as HTMLButtonElement; if (!el.disabled) { el.style.transform = 'translateY(-2px)'; el.style.boxShadow = '5px 5px 0 #2d2d2d'; } }}
+                onmouseout={(e) => { const el = e.currentTarget as HTMLElement; el.style.transform = ''; el.style.boxShadow = '4px 4px 0 #2d2d2d'; }}
               >
                 {#if checking}
-                  <svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                  <svg style="animation: spin 1s linear infinite; width: 1rem; height: 1rem;" fill="none" viewBox="0 0 24 24">
+                    <circle style="opacity: 0.25;" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+                    <path style="opacity: 0.75;" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                   </svg>
                   Redirecting…
                 {:else}
                   Pay with PayNow
-                  <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <svg style="width: 1rem; height: 1rem;" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                   </svg>
                 {/if}
               </button>
 
-              <p class="text-center text-xs text-zinc-400 mt-2">
+              <p style="text-align: center; font-family: 'Patrick Hand', cursive; font-size: 0.75rem; color: #2d2d2d; opacity: 0.4; margin-top: 0.5rem;">
                 Secure payment via Stripe · SGD only
               </p>
             </div>
@@ -283,4 +287,3 @@
     </div>
   </div>
 {/if}
-

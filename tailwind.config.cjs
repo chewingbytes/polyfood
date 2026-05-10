@@ -6,33 +6,30 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        "neo-bg": "#FFFDF5", // Cream/Off-White
-        "neo-ink": "#000000", // Pure Black
-        "neo-accent": "#FF6B6B", // Hot Red
-        "neo-secondary": "#FFD93D", // Vivid Yellow
-        "neo-muted": "#C4B5FD", // Soft Violet
-        "neo-white": "#FFFFFF", // White
+        "paper": "#fdfbf7",
+        "ink": "#2d2d2d",
+        "muted": "#e5e0d8",
+        "accent": "#ff4d4d",
+        "blue-pen": "#2d5da1",
       },
       fontFamily: {
-        sans: ["Space Grotesk", ...fontFamily.sans],
-      },
-      fontWeight: {
-        bold: "700",
-        black: "900",
+        heading: ["Kalam", "cursive"],
+        body: ["Patrick Hand", "cursive"],
+        sans: ["Patrick Hand", "cursive", ...fontFamily.sans],
       },
       boxShadow: {
-        "neo-sm": "4px 4px 0px 0px #000",
-        "neo-md": "8px 8px 0px 0px #000",
-        "neo-lg": "12px 12px 0px 0px #000",
-        "neo-xl": "16px 16px 0px 0px #000",
-      },
-      borderWidth: {
-        4: "4px",
-        8: "8px",
+        "sketch": "4px 4px 0px 0px #2d2d2d",
+        "sketch-md": "6px 6px 0px 0px #2d2d2d",
+        "sketch-lg": "8px 8px 0px 0px #2d2d2d",
+        "sketch-hover": "2px 2px 0px 0px #2d2d2d",
       },
       borderRadius: {
         none: "0",
         full: "9999px",
+        wobbly: "255px 15px 225px 15px / 15px 225px 15px 255px",
+        wobblyMd: "15px 225px 15px 255px / 225px 15px 255px 15px",
+        wobblyLg: "225px 15px 255px 15px / 15px 255px 15px 225px",
+        wobblyPill: "50px 40px 50px 40px / 40px 50px 40px 50px",
       },
       transitionDuration: {
         100: "100ms",

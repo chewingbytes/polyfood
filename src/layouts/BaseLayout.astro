@@ -15,15 +15,16 @@ const { title, description = "Order food from your polytechnic canteen." } = Ast
   <head>
     <meta charset="utf-8" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="manifest" href="/site.webmanifest">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
+    <!-- Hand-Drawn Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700;900&display=block"
+      href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Patrick+Hand&display=block"
       rel="stylesheet"
     />
     <title>{title}</title>
@@ -33,34 +34,35 @@ const { title, description = "Order food from your polytechnic canteen." } = Ast
     </style>
   </head>
   <body>
-    <header class="sticky top-0 z-[99] border-b-4 border-black bg-[#F9D404]">
+    <!-- ═══════════════════════════════ HEADER ═══════════════════════════════ -->
+    <header class="sticky top-0 z-[99]" style="background-color: #fff9c4; border-bottom: 3px solid #2d2d2d; box-shadow: 0 4px 0 0 #2d2d2d;">
       <!-- Main bar -->
-      <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
-        <a href="/" class="block">
-          <img src="/logo.png" alt="Food at Poly" class="h-12 w-auto rounded-md" />
+      <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
+        <!-- Logo -->
+        <a href="/" class="block" style="transition: transform 120ms ease;" onmouseover="this.style.transform='rotate(-2deg) scale(1.05)'" onmouseout="this.style.transform=''">
+          <img src="/logo.png" alt="Food at Poly" class="h-12 w-auto" style="border-radius: 12px 4px 10px 4px / 4px 10px 4px 12px;" />
         </a>
 
         <!-- Desktop nav -->
-        <nav class="hidden md:flex items-center gap-5">
-          <a href="/polytechnics" class="border-4 border-black bg-white px-4 py-2 text-sm font-bold uppercase tracking-wide shadow-[4px_4px_0px_0px_#000] transition-all duration-100 hover:-translate-y-0.5 hover:bg-red-400 hover:shadow-[6px_6px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none">
-            Polytechnics
+        <nav class="hidden md:flex items-center gap-4">
+          <a href="/polytechnics" class="btn" style="font-size: 0.95rem; padding: 0.4rem 1.2rem;">
+            Browse Polys
           </a>
           <AuthButton client:load />
           <CartIcon client:load />
         </nav>
 
-        <!-- Mobile hamburger button -->
+        <!-- Mobile hamburger -->
         <button
           id="hamburger-btn"
           aria-label="Open menu"
           aria-expanded="false"
-          class="md:hidden flex h-10 w-10 items-center justify-center border-4 border-black bg-black text-yellow-300 shadow-[3px_3px_0_#FFD93D] transition-all duration-100 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
+          class="md:hidden flex h-10 w-10 items-center justify-center"
+          style="border: 2px solid #2d2d2d; border-radius: 8px 4px 10px 4px / 4px 10px 4px 8px; background: white; box-shadow: 3px 3px 0 #2d2d2d; transition: all 120ms;"
         >
-          <!-- Hamburger icon -->
           <svg id="icon-hamburger" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="h-5 w-5">
             <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
           </svg>
-          <!-- Close icon -->
           <svg id="icon-close" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="h-5 w-5 hidden">
             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
           </svg>
@@ -68,7 +70,7 @@ const { title, description = "Order food from your polytechnic canteen." } = Ast
       </div>
 
       <!-- Desktop poly sub-bar -->
-      <div class="hidden md:block border-t-4 border-black bg-black">
+      <div class="hidden md:block" style="background-color: #2d2d2d; border-top: 2px solid #2d2d2d;">
         <div class="mx-auto max-w-7xl px-4">
           <div class="flex items-stretch">
             {[
@@ -80,25 +82,26 @@ const { title, description = "Order food from your polytechnic canteen." } = Ast
             ].map((p) => (
               <a
                 href={p.href}
-                class="group flex flex-1 flex-col items-center justify-center gap-0.5 border-r-4 border-black px-4 py-3 transition-colors duration-150 last:border-r-0 hover:bg-yellow-300"
+                class="group flex flex-1 flex-col items-center justify-center gap-0.5 px-4 py-2 transition-colors duration-150 last:border-r-0 hover:bg-[#fff9c4]"
+                style="border-right: 1px solid rgba(255,255,255,0.15);"
               >
-                <span class="text-xl font-black text-yellow-300 group-hover:text-black">{p.poly}</span>
-                <span class="hidden text-[10px] font-bold uppercase tracking-wide text-white/60 group-hover:text-black/60 lg:block">{p.name}</span>
+                <span class="font-heading text-base font-bold text-[#fff9c4] group-hover:text-[#2d2d2d]" style="font-family: 'Kalam', cursive;">{p.poly}</span>
+                <span class="hidden text-[10px] leading-tight text-white/50 group-hover:text-[#2d2d2d]/60 lg:block" style="font-family: 'Patrick Hand', cursive;">{p.name}</span>
               </a>
             ))}
           </div>
         </div>
       </div>
 
-      <!-- Mobile dropdown menu -->
+      <!-- Mobile dropdown -->
       <div
         id="mobile-menu"
-        class="md:hidden overflow-hidden border-t-4 border-black bg-black"
-        style="max-height: 0; transition: max-height 0.3s ease-in-out;"
+        class="md:hidden overflow-hidden"
+        style="max-height: 0; transition: max-height 0.3s ease-in-out; background-color: #fdfbf7; border-top: 2px solid #2d2d2d;"
       >
-        <!-- Cart + Auth row -->
-        <div class="flex items-center gap-4 border-b-4 border-white/20 px-5 py-4">
-          <span class="text-xs font-black uppercase tracking-widest text-white/50">Quick links</span>
+        <!-- Cart + Auth -->
+        <div class="flex items-center gap-4 px-5 py-4" style="border-bottom: 1px solid #e5e0d8;">
+          <span class="text-xs text-ink/50" style="font-family: 'Kalam', cursive;">Quick links</span>
           <div class="ml-auto flex items-center gap-3">
             <CartIcon client:load />
             <AuthButton client:load />
@@ -115,10 +118,11 @@ const { title, description = "Order food from your polytechnic canteen." } = Ast
           ].map((p) => (
             <a
               href={p.href}
-              class="group flex flex-col items-center justify-center gap-1 border-r-4 border-white/10 px-2 py-5 transition-colors duration-150 last:border-r-0 hover:bg-yellow-300"
+              class="flex flex-col items-center justify-center gap-1 px-2 py-4 hover:bg-[#fff9c4] transition-colors"
+              style="border-right: 1px solid #e5e0d8; font-family: 'Patrick Hand', cursive;"
             >
-              <span class="text-lg font-black text-yellow-300 group-hover:text-black">{p.poly}</span>
-              <span class="text-center text-[8px] font-bold uppercase leading-tight tracking-wide text-white/40 group-hover:text-black/60">{p.name}</span>
+              <span class="font-bold text-base text-[#2d2d2d]" style="font-family: 'Kalam', cursive;">{p.poly}</span>
+              <span class="text-center text-[8px] leading-tight text-ink/50">{p.name}</span>
             </a>
           ))}
         </div>
@@ -129,55 +133,54 @@ const { title, description = "Order food from your polytechnic canteen." } = Ast
     <main class="flex-1">
       <slot />
     </main>
-      <footer class="bg-black text-white py-16 px-4">
-    <div class="max-w-7xl mx-auto">
-      <div class="grid md:grid-cols-4 gap-12 mb-12">
-        <div class="md:col-span-2">
-          <div class="flex items-center gap-3 mb-4">
-            <img
-              src="/logo.png"
-              alt="Food at Poly"
-              class="h-12 w-auto rounded-md"
-            />
+
+    <!-- ═══════════════════════════════ FOOTER ═══════════════════════════════ -->
+    <footer style="background-color: #2d2d2d; color: #fdfbf7; padding: 4rem 1rem 2rem;">
+      <div class="max-w-7xl mx-auto">
+        <div class="grid md:grid-cols-4 gap-10 mb-10">
+          <!-- Brand -->
+          <div class="md:col-span-2">
+            <img src="/logo.png" alt="Food at Poly" class="h-12 w-auto mb-4" style="border-radius: 12px 4px 10px 4px / 4px 10px 4px 12px;" />
+            <p class="text-base mb-5" style="color: rgba(253,251,247,0.65); font-family: 'Patrick Hand', cursive; max-width: 28rem;">
+              Browse canteen menus and order food from any of Singapore's 5 polytechnics — all in one place.
+            </p>
+            <div class="flex gap-2 flex-wrap">
+              <span class="text-xs px-2 py-1" style="background: #fff9c4; color: #2d2d2d; border-radius: 4px 2px 6px 2px / 2px 6px 2px 4px; border: 1px solid rgba(255,255,255,0.2); font-family: 'Kalam', cursive;">🇸🇬 Singapore</span>
+              <span class="text-xs px-2 py-1" style="border: 1px solid rgba(255,255,255,0.2); border-radius: 4px 2px 6px 2px / 2px 6px 2px 4px; font-family: 'Kalam', cursive;">5 Polytechnics</span>
+              <span class="text-xs px-2 py-1" style="border: 1px solid rgba(255,255,255,0.2); border-radius: 4px 2px 6px 2px / 2px 6px 2px 4px; font-family: 'Kalam', cursive;">Beta 2026</span>
+            </div>
           </div>
-          <p class="text-lg font-bold text-white/70 max-w-md mb-6">
-            Browse canteen menus and order food from any of Singapore's 5 polytechnics — all in one place.
-          </p>
-          <div class="flex gap-2 flex-wrap">
-            <span class="bg-yellow-300 border-2 border-white/20 text-black px-2 py-1 font-black text-xs uppercase">🇸🇬 Singapore</span>
-            <span class="border-2 border-white/20 px-2 py-1 font-black text-xs uppercase text-white">5 Polytechnics</span>
-            <span class="border-2 border-white/20 px-2 py-1 font-black text-xs uppercase text-white">Beta 2026</span>
+
+          <!-- Browse -->
+          <div>
+            <h3 class="text-lg mb-4" style="color: #fff9c4; font-family: 'Kalam', cursive;">Browse</h3>
+            <ul class="space-y-2" style="font-family: 'Patrick Hand', cursive; color: rgba(253,251,247,0.65);">
+              <li><a href="/polytechnics/sp" class="hover:text-[#fff9c4] transition-colors">Singapore Polytechnic</a></li>
+              <li><a href="/polytechnics/np" class="hover:text-[#fff9c4] transition-colors">Ngee Ann Polytechnic</a></li>
+              <li><a href="/polytechnics/tp" class="hover:text-[#fff9c4] transition-colors">Temasek Polytechnic</a></li>
+              <li><a href="/polytechnics/nyp" class="hover:text-[#fff9c4] transition-colors">Nanyang Polytechnic</a></li>
+              <li><a href="/polytechnics/rp" class="hover:text-[#fff9c4] transition-colors">Republic Polytechnic</a></li>
+            </ul>
+          </div>
+
+          <!-- Account -->
+          <div>
+            <h3 class="text-lg mb-4" style="color: #fff9c4; font-family: 'Kalam', cursive;">Account</h3>
+            <ul class="space-y-2" style="font-family: 'Patrick Hand', cursive; color: rgba(253,251,247,0.65);">
+              <li><a href="/auth/login" class="hover:text-[#fff9c4] transition-colors">Login</a></li>
+              <li><a href="/auth/signup" class="hover:text-[#fff9c4] transition-colors">Sign Up</a></li>
+              <li><a href="/settings" class="hover:text-[#fff9c4] transition-colors">Settings</a></li>
+              <li><a href="mailto:bryanchewzy24@gmail.com" class="hover:text-[#fff9c4] transition-colors">Contact Support</a></li>
+            </ul>
           </div>
         </div>
 
-        <div>
-          <h3 class="text-lg font-black uppercase mb-4 text-yellow-300">Browse</h3>
-          <ul class="space-y-2 text-white/70 font-bold">
-            <li><a href="/polytechnics/sp" class="hover:text-yellow-300 transition-colors">Singapore Polytechnic</a></li>
-            <li><a href="/polytechnics/np" class="hover:text-yellow-300 transition-colors">Ngee Ann Polytechnic</a></li>
-            <li><a href="/polytechnics/tp" class="hover:text-yellow-300 transition-colors">Temasek Polytechnic</a></li>
-            <li><a href="/polytechnics/nyp" class="hover:text-yellow-300 transition-colors">Nanyang Polytechnic</a></li>
-            <li><a href="/polytechnics/rp" class="hover:text-yellow-300 transition-colors">Republic Polytechnic</a></li>
-          </ul>
-        </div>
-
-        <div>
-          <h3 class="text-lg font-black uppercase mb-4 text-yellow-300">Account</h3>
-          <ul class="space-y-2 text-white/70 font-bold">
-            <li><a href="/auth/login" class="hover:text-yellow-300 transition-colors">Login</a></li>
-            <li><a href="/auth/signup" class="hover:text-yellow-300 transition-colors">Sign Up</a></li>
-            <li><a href="/settings" class="hover:text-yellow-300 transition-colors">Settings</a></li>
-            <li><a href="mailto:bryanchewzy24@gmail.com" class="hover:text-yellow-300 transition-colors">Contact Support</a></li>
-          </ul>
+        <div class="pt-6" style="border-top: 1px solid rgba(255,255,255,0.15); display: flex; flex-direction: column; gap: 0.5rem; align-items: center; text-align: center;">
+          <p style="color: rgba(253,251,247,0.35); font-family: 'Patrick Hand', cursive; font-size: 0.85rem;">© 2026 Food at Poly. All rights reserved.</p>
+          <p style="color: rgba(253,251,247,0.35); font-family: 'Patrick Hand', cursive; font-size: 0.85rem;">Made with 💛 for Singapore poly students</p>
         </div>
       </div>
-
-      <div class="border-t-4 border-white/20 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-        <p class="font-bold text-white/40 text-sm">© 2026 Food at Poly. All rights reserved.</p>
-        <p class="font-bold text-white/40 text-sm">Made with 💛 for Singapore poly students</p>
-      </div>
-    </div>
-  </footer>
+    </footer>
 
     <script is:inline>
       const btn = document.getElementById("hamburger-btn");

@@ -12,62 +12,70 @@ if (!canteen) return Astro.redirect("/404");
 ---
 
 <BaseLayout title={`${canteen.name} — Food at Poly`}>
-  <div class="container mx-auto px-4 py-16">
+  <div class="container mx-auto px-4 py-12">
     <!-- Breadcrumb -->
-    <nav class="mb-10 flex flex-wrap items-center gap-2 text-sm font-bold uppercase tracking-wide">
-      <a href="/polytechnics" class="hover:underline">Polytechnics</a>
+    <nav class="mb-10 flex flex-wrap items-center gap-2" style="font-family: 'Patrick Hand', cursive; font-size: 0.9rem; color: #2d2d2d; opacity: 0.6;">
+      <a href="/polytechnics" style="text-decoration: underline; text-decoration-style: wavy;">Polytechnics</a>
       {canteen.polytechnic && (
         <>
           <span>›</span>
-          <a href={`/polytechnics/${canteen.polytechnic.slug}`} class="hover:underline">
+          <a href={`/polytechnics/${canteen.polytechnic.slug}`} style="text-decoration: underline; text-decoration-style: wavy;">
             {canteen.polytechnic.shortName}
           </a>
         </>
       )}
       <span>›</span>
-      <span class="text-black/50">{canteen.name}</span>
+      <span style="opacity: 1; color: #2d2d2d;">{canteen.name}</span>
     </nav>
 
-    <h2 class="mb-8 text-4xl font-black uppercase md:text-5xl">{canteen.name} Food Stores</h2>
+    <h1 class="mb-10" style="font-family: 'Kalam', cursive; font-size: clamp(2rem, 5vw, 3rem); color: #2d2d2d;">
+      {canteen.name} Food Stores
+    </h1>
 
     {canteen.stores && canteen.stores.length > 0 ? (
       <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-        {canteen.stores.map((store) => (
+        {canteen.stores.map((store, i) => (
           <a
             href={`/stores/${store.slug}`}
-            class="block border-4 border-black bg-white shadow-[8px_8px_0px_0px_#000] transition-all duration-200 hover:-translate-y-1 hover:shadow-[12px_12px_0px_0px_#000]"
+            style={`display: block; background: white; border: 2px solid #2d2d2d; border-radius: ${i % 2 === 0 ? '255px 15px 225px 15px / 15px 225px 15px 255px' : '15px 225px 15px 255px / 225px 15px 255px 15px'}; box-shadow: 5px 5px 0 #2d2d2d; overflow: hidden; transition: all 150ms ease; transform: rotate(${[-0.5, 0.6, -0.4][i % 3]}deg); text-decoration: none; color: inherit;`}
+            onmouseover="this.style.transform='translateY(-4px) rotate(0deg)'; this.style.boxShadow='7px 7px 0 #2d2d2d';"
+            onmouseout={`this.style.transform='rotate(${[-0.5, 0.6, -0.4][i % 3]}deg)'; this.style.boxShadow='5px 5px 0 #2d2d2d';`}
           >
-            {store.image?.asset?.url && (
+            {store.image?.asset?.url ? (
               <img
                 src={store.image.asset.url}
                 alt={store.name}
-                class="h-48 w-full border-b-4 border-black object-cover"
+                style="width: 100%; height: 11rem; object-fit: cover; border-bottom: 2px solid #2d2d2d;"
               />
+            ) : (
+              <div style="width: 100%; height: 11rem; display: flex; align-items: center; justify-content: center; font-size: 3.5rem; border-bottom: 2px solid #2d2d2d; background: linear-gradient(135deg, #fff9c4, #fde8d8);">
+                🍜
+              </div>
             )}
-            <div class="p-6">
-              <h3 class="mb-2 text-2xl font-black uppercase">{store.name}</h3>
+            <div style="padding: 1.5rem;">
+              <h3 style="font-family: 'Kalam', cursive; font-size: 1.35rem; color: #2d2d2d; margin-bottom: 0.5rem;">{store.name}</h3>
               {store.cuisine && (
-                <div class="mb-3 inline-block border-4 border-black bg-red-400 px-3 py-1 text-sm font-black shadow-[3px_3px_0px_0px_#000]">
+                <span class="inline-block mb-3" style="font-family: 'Kalam', cursive; font-size: 0.8rem; padding: 2px 10px; background: #ff4d4d; color: white; border: 1px solid #2d2d2d; border-radius: 4px 8px 4px 8px / 8px 4px 8px 4px;">
                   {store.cuisine}
-                </div>
+                </span>
               )}
               {store.stallNumber && (
-                <p class="text-sm font-bold text-black/50">Stall {store.stallNumber}</p>
+                <p style="font-family: 'Patrick Hand', cursive; font-size: 0.85rem; color: #2d2d2d; opacity: 0.55;">Stall {store.stallNumber}</p>
               )}
               {store.contactNumber && (
-                <p class="text-sm font-bold text-black/50">📞 {store.contactNumber}</p>
+                <p style="font-family: 'Patrick Hand', cursive; font-size: 0.85rem; color: #2d2d2d; opacity: 0.55;">📞 {store.contactNumber}</p>
               )}
             </div>
-            <div class="border-t-4 border-black bg-yellow-300 px-6 py-3">
-              <span class="text-sm font-black uppercase tracking-widest">See Menu →</span>
+            <div style="padding: 0.75rem 1.5rem; border-top: 2px solid #2d2d2d; background: #fff9c4;">
+              <span style="font-family: 'Kalam', cursive; font-size: 0.9rem; color: #2d2d2d; font-weight: 700;">See Menu →</span>
             </div>
           </a>
         ))}
       </div>
     ) : (
-      <div class="border-4 border-black bg-white p-16 text-center shadow-[8px_8px_0px_0px_#000]">
-        <p class="text-2xl font-black uppercase">No stores yet.</p>
-        <p class="mt-2 font-bold text-black/60">Add them in the Sanity Studio.</p>
+      <div style="border: 2px solid #2d2d2d; border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px; background: white; padding: 4rem; text-align: center; box-shadow: 4px 4px 0 #2d2d2d;">
+        <p style="font-family: 'Kalam', cursive; font-size: 1.5rem; color: #2d2d2d;">No stores yet.</p>
+        <p style="font-family: 'Patrick Hand', cursive; color: #2d2d2d; opacity: 0.6; margin-top: 0.5rem;">Add them in the Sanity Studio.</p>
       </div>
     )}
   </div>

@@ -1,0 +1,94 @@
+<script lang="ts">
+  import { onMount } from "svelte";
+  import { supabaseBrowser } from "../utils/supabase-browser";
+
+  let displayName = $state("—");
+  let displayEmail = $state("—");
+  let fieldName = $state("—");
+  let fieldEmail = $state("—");
+  let fieldSince = $state("—");
+  let ready = $state(false);
+
+  onMount(async () => {
+    const { data } = await supabaseBrowser.auth.getSession();
+    const user = data.session?.user;
+
+    if (!user) {
+      window.location.replace("/auth/login");
+      return;
+    }
+
+    displayName =
+      (user.user_metadata?.full_name as string | undefined) ??
+      user.email?.split("@")[0] ??
+      "User";
+    displayEmail = user.email ?? "";
+    fieldName = (user.user_metadata?.full_name as string | undefined) ?? "—";
+    fieldEmail = user.email ?? "";
+    fieldSince = new Date(user.created_at).toLocaleDateString("en-SG", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+    ready = true;
+  });
+
+  async function logout() {
+    await supabaseBrowser.auth.signOut();
+    window.location.href = "/auth/login";
+  }
+</script>
+
+{#if ready}
+  <div class="mx-auto max-w-2xl px-4 py-16">
+    <div class="mb-10">
+      <div class="mb-2 inline-block -rotate-1 border-4 border-black bg-[#C4B5FD] px-3 py-1 text-xs font-black uppercase tracking-widest shadow-[3px_3px_0px_0px_#000]">
+        Account
+      </div>
+      <h1 class="text-5xl font-black uppercase leading-none">Settings</h1>
+    </div>
+
+    <!-- Profile card -->
+    <div class="mb-6 border-4 border-black bg-white p-8 shadow-[6px_6px_0px_0px_#000]">
+      <div class="mb-6 flex items-center gap-5">
+        <div class="flex h-16 w-16 items-center justify-center border-4 border-black bg-[#C4B5FD] shadow-[4px_4px_0px_0px_#000]">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-9 w-9">
+            <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clip-rule="evenodd" />
+          </svg>
+        </div>
+        <div>
+          <p class="text-2xl font-black uppercase">{displayName}</p>
+          <p class="text-sm font-bold text-black/60">{displayEmail}</p>
+        </div>
+      </div>
+
+      <div class="space-y-4">
+        <div class="border-4 border-black bg-gray-50 p-4">
+          <p class="mb-1 text-[10px] font-black uppercase tracking-widest text-black/50">Full Name</p>
+          <p class="font-black">{fieldName}</p>
+        </div>
+        <div class="border-4 border-black bg-gray-50 p-4">
+          <p class="mb-1 text-[10px] font-black uppercase tracking-widest text-black/50">Email</p>
+          <p class="font-black">{fieldEmail}</p>
+        </div>
+        <div class="border-4 border-black bg-gray-50 p-4">
+          <p class="mb-1 text-[10px] font-black uppercase tracking-widest text-black/50">Member Since</p>
+          <p class="font-black">{fieldSince}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Logout -->
+    <div class="border-4 border-black bg-white p-6 shadow-[6px_6px_0px_0px_#000]">
+      <h2 class="mb-4 text-lg font-black uppercase">Sign Out</h2>
+      <p class="mb-5 text-sm font-bold text-black/60">You will be returned to the login page.</p>
+      <button
+        type="button"
+        onclick={logout}
+        class="border-4 border-black bg-red-400 px-6 py-3 font-black uppercase tracking-wide shadow-[4px_4px_0px_0px_#000] transition-all duration-100 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
+      >
+        Logout
+      </button>
+    </div>
+  </div>
+{/if}

@@ -20,24 +20,28 @@
 </script>
 
 {#if !ready}
-  <div class="h-9 w-9 border-4 border-black bg-gray-200"></div>
+  <div style="width: 2.25rem; height: 2.25rem; border: 2px solid #2d2d2d; border-radius: 50% 40% 50% 40% / 40% 50% 40% 50%; background: #e5e0d8;"></div>
 {:else if user}
   <a
     href="/settings"
     aria-label="Profile settings"
-    class="flex h-9 w-9 items-center justify-center border-4 border-black bg-[#C4B5FD] shadow-[3px_3px_0_#000] transition-all duration-100 hover:shadow-[5px_5px_0_#000] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none"
+    style="display: flex; width: 2.25rem; height: 2.25rem; align-items: center; justify-content: center; border: 2px solid #2d2d2d; border-radius: 50% 40% 50% 40% / 40% 50% 40% 50%; background: #dbeafe; box-shadow: 3px 3px 0 #2d2d2d; transition: all 120ms ease; color: #2d2d2d; text-decoration: none;"
+    onmouseover={(e) => { const el = e.currentTarget as HTMLElement; el.style.boxShadow='4px 4px 0 #2d2d2d'; el.style.transform='translateY(-1px)'; }}
+    onmouseout={(e) => { const el = e.currentTarget as HTMLElement; el.style.boxShadow='3px 3px 0 #2d2d2d'; el.style.transform=''; }}
   >
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 1.1rem; height: 1.1rem;">
       <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clip-rule="evenodd" />
     </svg>
   </a>
 {:else}
   <a
     href="/auth/login"
-    class="flex h-9 w-9 items-center justify-center border-4 border-black bg-white shadow-[3px_3px_0_#000] transition-all duration-100 hover:shadow-[5px_5px_0_#000] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none"
     aria-label="Login"
+    style="display: flex; width: 2.25rem; height: 2.25rem; align-items: center; justify-content: center; border: 2px solid #2d2d2d; border-radius: 50% 40% 50% 40% / 40% 50% 40% 50%; background: white; box-shadow: 3px 3px 0 #2d2d2d; transition: all 120ms ease; color: #2d2d2d; text-decoration: none;"
+    onmouseover={(e) => { const el = e.currentTarget as HTMLElement; el.style.boxShadow='4px 4px 0 #2d2d2d'; el.style.transform='translateY(-1px)'; el.style.background='#ff4d4d'; el.style.color='white'; }}
+    onmouseout={(e) => { const el = e.currentTarget as HTMLElement; el.style.boxShadow='3px 3px 0 #2d2d2d'; el.style.transform=''; el.style.background='white'; el.style.color='#2d2d2d'; }}
   >
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 1.1rem; height: 1.1rem;">
       <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clip-rule="evenodd" />
     </svg>
   </a>

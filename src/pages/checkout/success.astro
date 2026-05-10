@@ -18,10 +18,10 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
       </a>
     </div>
   </div>
-
-  <script>
-    // Clear cart after successful payment
-    localStorage.removeItem("fap-cart");
-    localStorage.removeItem("fap-collection");
-  </script>
 </BaseLayout>
+
+<script is:inline>
+  // Clear cart after successful payment
+  localStorage.removeItem("fap-cart");
+  localStorage.removeItem("fap-collection");
+</script>

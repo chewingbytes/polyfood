@@ -1,26 +1,30 @@
 @import "tailwindcss";
 
 @theme {
-  /* Neo-brutalism Color Palette */
-  --color-neo-bg: #FFFDF5;
-  --color-neo-ink: #000000;
-  --color-neo-accent: #FF6B6B;
-  --color-neo-secondary: #FFD93D;
-  --color-neo-muted: #C4B5FD;
-  --color-neo-white: #FFFFFF;
+  /* Hand-Drawn Color Palette */
+  --color-paper: #fdfbf7;
+  --color-ink: #2d2d2d;
+  --color-muted: #e5e0d8;
+  --color-accent: #ff4d4d;
+  --color-blue-pen: #2d5da1;
+  --color-yellow-post: #fff9c4;
   
   /* Shadows */
-  --shadow-neo-sm: 4px 4px 0px 0px #000;
-  --shadow-neo-md: 8px 8px 0px 0px #000;
-  --shadow-neo-lg: 12px 12px 0px 0px #000;
-  --shadow-neo-xl: 16px 16px 0px 0px #000;
+  --shadow-sketch: 4px 4px 0px 0px #2d2d2d;
+  --shadow-sketch-md: 6px 6px 0px 0px #2d2d2d;
+  --shadow-sketch-lg: 8px 8px 0px 0px #2d2d2d;
+  --shadow-sketch-hover: 2px 2px 0px 0px #2d2d2d;
   
   /* Font Family */
-  --font-family-sans: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+  --font-family-heading: 'Kalam', cursive;
+  --font-family-sans: 'Patrick Hand', cursive, ui-sans-serif, system-ui, sans-serif;
   
   /* Border Radius */
   --radius-none: 0;
   --radius-full: 9999px;
+  --radius-wobbly: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  --radius-wobbly-md: 15px 225px 15px 255px / 225px 15px 255px 15px;
+  --radius-wobbly-pill: 50px 40px 50px 40px / 40px 50px 40px 50px;
 }
 
 html {
@@ -31,9 +35,12 @@ body {
   display: flex;
   min-height: 100vh;
   flex-direction: column;
-  background-color: "#FAF9F6";
-  color: var(--color-neo-ink);
-  font-weight: 700;
+  background-color: var(--color-paper);
+  background-image: radial-gradient(var(--color-muted) 1px, transparent 1px);
+  background-size: 24px 24px;
+  color: var(--color-ink);
+  font-family: 'Patrick Hand', cursive, sans-serif;
+  font-size: 1rem;
 }
 
 main {
@@ -41,8 +48,8 @@ main {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-weight: 900;
-  text-transform: uppercase;
+  font-family: 'Kalam', cursive;
+  font-weight: 700;
 }
 
 details > summary {
@@ -53,71 +60,102 @@ details > summary::-webkit-details-marker {
   display: none;
 }
 
-*,
-*::before,
-*::after {
-  border-color: var(--color-neo-ink);
+/* Wobbly border-radius utility classes */
+.wobble {
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+}
+.wobble-alt {
+  border-radius: 15px 225px 15px 255px / 225px 15px 255px 15px;
+}
+.wobble-pill {
+  border-radius: 50px 40px 50px 40px / 40px 50px 40px 50px;
+}
+.wobble-sm {
+  border-radius: 8px 4px 12px 6px / 6px 12px 4px 8px;
 }
 
-/* Component Classes */
-.btn {
-  display: inline-block;
-  height: 3.5rem;
-  user-select: none;
-  border-width: 4px;
-  border-color: var(--color-neo-ink);
-  padding: 0.75rem 2rem;
-  text-align: center;
-  font-size: 0.875rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  transition-property: all;
-  transition-duration: 100ms;
+/* Sketch shadow utility */
+.shadow-sketch {
+  box-shadow: 4px 4px 0px 0px var(--color-ink);
+}
+.shadow-sketch-md {
+  box-shadow: 6px 6px 0px 0px var(--color-ink);
+}
+.shadow-sketch-lg {
+  box-shadow: 8px 8px 0px 0px var(--color-ink);
 }
 
-.btn-primary {
-  background-color: var(--color-neo-accent);
-  color: white;
-  box-shadow: var(--shadow-neo-sm);
-}
-
-.btn-primary:hover {
-  box-shadow: var(--shadow-neo-md);
-}
-
-.btn-primary:active {
-  transform: translate(2px, 2px);
-  box-shadow: none;
-}
-
-.btn-secondary {
-  background-color: var(--color-neo-secondary);
-  color: var(--color-neo-ink);
-  box-shadow: var(--shadow-neo-sm);
-}
-
-.btn-secondary:hover {
-  box-shadow: var(--shadow-neo-md);
-}
-
-.btn-secondary:active {
-  transform: translate(2px, 2px);
-  box-shadow: none;
-}
-
+/* Paper card style */
 .card {
   display: block;
-  border-width: 4px;
-  border-color: var(--color-neo-ink);
-  background-color: white;
-  box-shadow: var(--shadow-neo-md);
-  transition-property: all;
-  transition-duration: 200ms;
+  border: 2px solid var(--color-ink);
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  background-color: #ffffff;
+  box-shadow: 4px 4px 0px 0px var(--color-ink);
+  transition: box-shadow 150ms ease, transform 150ms ease;
 }
 
 .card:hover {
-  transform: translateY(-0.25rem);
-  box-shadow: var(--shadow-neo-lg);
+  transform: translateY(-3px) rotate(0.5deg);
+  box-shadow: 6px 6px 0px 0px var(--color-ink);
+}
+
+/* Button styles */
+.btn {
+  display: inline-block;
+  padding: 0.6rem 1.5rem;
+  border: 2px solid var(--color-ink);
+  border-radius: 50px 40px 50px 40px / 40px 50px 40px 50px;
+  font-family: 'Kalam', cursive;
+  font-size: 1rem;
+  font-weight: 700;
+  background-color: #ffffff;
+  box-shadow: 4px 4px 0px 0px var(--color-ink);
+  transition: all 120ms ease;
+  cursor: pointer;
+  text-decoration: none;
+  user-select: none;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 6px 6px 0px 0px var(--color-ink);
+}
+
+.btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0px 0px var(--color-ink);
+}
+
+.btn-primary {
+  background-color: var(--color-accent);
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background-color: #e03030;
+}
+
+.btn-secondary {
+  background-color: var(--color-blue-pen);
+  color: #ffffff;
+}
+
+.btn-secondary:hover {
+  background-color: #1e4a85;
+}
+
+/* Tape decoration (optional class) */
+.tape::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-2deg);
+  width: 60px;
+  height: 20px;
+  background-color: rgba(255, 249, 196, 0.8);
+  border: 1px solid rgba(45, 45, 45, 0.3);
+  border-radius: 2px;
 }
 
